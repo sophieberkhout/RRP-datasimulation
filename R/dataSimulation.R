@@ -1,4 +1,4 @@
-simulateData <- function(N, meansInt){
+dataRRP <- function(N, meansInt){
 
     n <- N/2 # Samplze size per group
     meansCon <- rep(meansInt[1], 3) # Means for control group are equal to the first mean of meansInt
@@ -26,7 +26,7 @@ simulateData <- function(N, meansInt){
 
 }
 
-simulateData(N = 100, meansInt = c(30, 27, 25))
+dataRRP(N = 100, meansInt = c(30, 27, 25))
 head(data)
 
 # Plot the data
