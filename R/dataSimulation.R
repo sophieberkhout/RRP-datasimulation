@@ -1,6 +1,8 @@
+source(file = "R/mySample.R")
+
 dataRRP <- function(N, means, Sigma){
 
-    data <- MASS::mvrnorm(N, means, Sigma)
+    data <- mySample(N, means, Sigma)
     data <- as.data.frame(rbind(data[, -(4:6)], data[, 4:6]))
     data$Group <- rep(c(0, 1), each = N)
     return(data)
