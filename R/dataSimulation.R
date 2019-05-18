@@ -1,27 +1,41 @@
 source(file = "R/mySample.R")
 
-dataRRP <- function(N, means, Sigma){
+dataRRP <- function(N, means, min, max, Sigma){
 
-    data <- mySample(N, means, Sigma)
+    data <- mySample(N/2, means, min, max, Sigma)
     data <- as.data.frame(rbind(data[, -(4:6)], data[, 4:6]))
-    data$Group <- rep(c(0, 1), each = N)
+    data <- as.data.frame(rbind(test[, 1:2], test[, 3:4], test[, 5:6]))
+    data$Group <- rep(c(0, 1), each = N/2)
     return(data)
 
 }
 
 # Input
 ## Create variance-covariance matrix
-Sigma <- matrix(0.7, 6, 6) # empty matrix
-diag(Sigma) <- 1 # all variances 1
-Sigma[4:6, 1:3] <- 0
-Sigma[upper.tri(Sigma)] <- rev(Sigma[lower.tri(Sigma)])
+s <- matrix(0.7, 3, 3)
+diag(s) <- 1
+em <- matrix(0, 3, 3)
+Sigma <- cbind(rbind(s, em), rbind(em, s)) # 2x3
+
+s <- matrix(0.7, 2, 2)
+diag(s) <- 1
+em <- matrix(0, 2, 2)
+Sigma <- cbind(rbind(s, em, em), rbind(em, s, em), rbind(em, em, s)) # 3x2
 
 ## Sample size and mean values
-N <- 10
-means <- c(20, 20, 20, 20, 25, 30)
+N <- 100
+means <- c(20, 20, 20, 20, 25, 29) # 2x3
+means <- c(20, 20, 20, 25, 20, 30) # 3x2
+min <- 15
+max <- 35
 
-data <- dataRRP(N, means, Sigma)
+data <- dataRRP(N, means, min, max, Sigma)
 head(data)
+
+## Other variables
+data$Gender <- sample(c(1, 2), 100, replace = T)
+data$Age <- rnorm(100, 18) # truncated?
+
 
 # Plot the data
 library(tidyr)

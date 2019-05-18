@@ -14,8 +14,4 @@ mySample <- function(N, mu, min, max, Sigma){
   m[m < min | m > max] <- mean(m)
   return(m)
 }
-min <- 18
-max <- 30
 
-mu <- means
-hist(m[, 4])
