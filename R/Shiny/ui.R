@@ -6,24 +6,60 @@ dashboardPage(skin = "black",
                   titleWidth = 500),
   dashboardSidebar(disable = TRUE),
   dashboardBody(
-    box(width = 5,
+    box(width = 6,
       tabBox(width = 12, id = "sidePanel",
-        tabPanel("Descriptives",
+        tabPanel("Start",
                  numericInput("ID", "Student Number", 0),
                  sliderInput("N", "Sample Size per Group", 30, 70, 50),
                  uiOutput("females"),
                  uiOutput("males"),
-                 selectInput("design", "Design", c("2 independent 3 repeated measures" = "2x3",
-                                                   "3 independent 2 repeated measures" = "3x2")
-                 ),
+                 selectInput("design", "Design", c("2 independent 3 repeated" = "2x3",
+                                                   "3 independent 2 repeated" = "3x2")
+                 )
+        ),
+        tabPanel("Dependent",
                  h4("Dependent Variable"),
-                 textInput("v1", "Variable name"),
+                 textInput("nameDV", "Variable name"),
+                 helpText("Measurement moment"),
+                 fluidRow(
+                   column(4,
+                          textInput("t1DV", "First", "One")
+                   ),
+                   column(4,
+                          textInput("t2DV", "Second", "Two")
+                   ),
+                   column(4,
+                          conditionalPanel("input.design == '2x3'",
+                                           textInput("t3DV", "Last", "Three")
+                          )
+                   )
+                 ),
+                 helpText("Group names"),
+                 fluidRow(
+                   column(4,
+                          textInput("g1DV", "Group 1", "Control")
+                   ),
+                   column(4,
+                          textInput("g2DV", "Group 2", "Treatment")
+                   ),
+                   column(4,
+                          conditionalPanel("input.design == '3x2'",
+                                           textInput("g3DV", "Group 3", "Placebo")
+                          )
+                   )
+                 ),
+
+
+                 h4("Expectations"),
+                 uiOutput("expec2x3"),
+                 uiOutput("expec3x2"),
+                 h4("Restrictions"),
                  fluidRow(
                    column(6,
-                    numericInput("v1Min", "Min", -1)
+                          uiOutput("minDVt")
                    ),
                    column(6,
-                    numericInput("v1Max", "Max", 1)
+                          uiOutput("maxDVt")
                    )
                  )
         ),
@@ -45,40 +81,10 @@ dashboardPage(skin = "black",
         actionButton("submit", "Submit")
       )
     ),
-    box(title = "Expectations",
-      width = 5,
-      conditionalPanel("input.design == '2x3'",
-        fluidRow(
-          column(4,
-                 numericInput("v111", "g1t1", 0),
-                 numericInput("v121", "g2t1", 0)
-          ),
-          column(4,
-                 numericInput("v112", "g1t2", 0),
-                 numericInput("v122", "g2t2", 0)
-          ),
-          column(4,
-                 numericInput("v113", "g1t3", 0),
-                 numericInput("v123", "g2t3", 0)
-          ))
-      ),
-      conditionalPanel("input.design == '3x2'",
-                       fluidRow(
-                         column(6,
-                                numericInput("v111t", "g1t1", 0),
-                                numericInput("v121t", "g2t1", 0),
-                                numericInput("v131t", "g3t1", 0)
-                         ),
-                         column(6,
-                                numericInput("v112t", "g1t2", 0),
-                                numericInput("v122t", "g2t2", 0),
-                                numericInput("v132t", "g3t2", 0)
-                         ))
-      )
-    ),
-    box(width = 5,
+    box(width = 6,
         plotOutput("plot"),
-        tableOutput("table")
+        tableOutput("table"),
+        tableOutput("test")
     )
   )
 )
