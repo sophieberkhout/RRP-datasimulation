@@ -23,14 +23,14 @@ dashboardPage(skin = "black",
                  helpText("Measurement moment"),
                  fluidRow(
                    column(4,
-                          textInput("t1DV", "First", "One")
+                          textInput("t1DV", "First", "1")
                    ),
                    column(4,
-                          textInput("t2DV", "Second", "Two")
+                          textInput("t2DV", "Second", "2")
                    ),
                    column(4,
                           conditionalPanel("input.design == '2x3'",
-                                           textInput("t3DV", "Last", "Three")
+                                           textInput("t3DV", "Last", "3")
                           )
                    )
                  ),
@@ -51,8 +51,8 @@ dashboardPage(skin = "black",
 
 
                  h4("Expectations"),
-                 uiOutput("expec2x3"),
-                 uiOutput("expec3x2"),
+                 uiOutput("expecDV2x3"),
+                 uiOutput("expecDV3x2"),
                  h4("Restrictions"),
                  fluidRow(
                    column(6,
@@ -64,10 +64,50 @@ dashboardPage(skin = "black",
                  )
         ),
         tabPanel("Manipulation",
-                 h5("Fill in this form for your manipulation check variable."),
-                 textInput("v1", "Variable name"),
-                 numericInput("v1Min", "Min", 0),
-                 numericInput("v1Max", "Max", 0)
+                 h4("Manipulation Variable"),
+                 textInput("nameMV", "Variable name"),
+                 helpText("Measurement moment"),
+                 fluidRow(
+                   column(4,
+                          textInput("t1MV", "First", "1")
+                   ),
+                   column(4,
+                          textInput("t2MV", "Second", "2")
+                   ),
+                   column(4,
+                          conditionalPanel("input.design == '2x3'",
+                                           textInput("t3MV", "Last", "3")
+                          )
+                   )
+                 ),
+                 helpText("Group names"),
+                 fluidRow(
+                   column(4,
+                          textInput("g1MV", "Group 1", "Control")
+                   ),
+                   column(4,
+                          textInput("g2MV", "Group 2", "Treatment")
+                   ),
+                   column(4,
+                          conditionalPanel("input.design == '3x2'",
+                                           textInput("g3MV", "Group 3", "Placebo")
+                          )
+                   )
+                 ),
+
+
+                 h4("Expectations"),
+                 uiOutput("expecMV2x3"),
+                 uiOutput("expecMV3x2"),
+                 h4("Restrictions"),
+                 fluidRow(
+                   column(6,
+                          uiOutput("minMVt")
+                   ),
+                   column(6,
+                          uiOutput("maxMVt")
+                   )
+                 )
         ),
         tabPanel("Extra",
                  h5("If you want to add an extra continuous and/or categorical variable, fill in this form."),
@@ -82,9 +122,10 @@ dashboardPage(skin = "black",
       )
     ),
     box(width = 6,
-        plotOutput("plot"),
-        tableOutput("table"),
-        tableOutput("test")
+        plotOutput("plotDV")
+    ),
+    box(width = 6,
+        plotOutput("plotMV")
     )
   )
 )

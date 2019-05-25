@@ -6,7 +6,7 @@ plotData <- function(data, ylab, glab, tixlab){
 
   dataPlot <- data %>% gather(Time, Y, -Group, -Gender) # reshape into long format
   dataPlot$Group <- as.factor(dataPlot$Group)
-  dataPlot$Time <- factor(dataPlot$Time, levels = names(subset(dat, select = -c(Group, Gender))))
+  dataPlot$Time <- factor(dataPlot$Time, levels = unique(dataPlot$Time))
 
   p <- ggplot(data = dataPlot,
               aes(x = Time,
