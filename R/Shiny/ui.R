@@ -1,6 +1,8 @@
 library(shiny)
+library(shinythemes)
 
 navbarPage("", id = "navbar",
+           theme = shinytheme("simplex"),
         tabPanel("Hello",
           sidebarLayout(
             sidebarPanel(

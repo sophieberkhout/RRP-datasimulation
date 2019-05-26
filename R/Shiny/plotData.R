@@ -20,7 +20,11 @@ plotData <- function(data, ylab, glab, tixlab){
     scale_colour_brewer(labels = glab, palette = "Dark2") +
     scale_x_discrete(labels = tixlab) +
     ylab(ylab) +
-    theme(axis.title.x = element_blank())
+    theme(axis.title.x = element_blank(),
+          axis.text = element_text(size = 12),
+          axis.title = element_text(size = 12),
+          legend.text = element_text(size = 12),
+          legend.title = element_text(size = 12))
 
   return(p)
 
