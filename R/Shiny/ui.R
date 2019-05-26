@@ -11,6 +11,15 @@ dashboardPage(skin = "black",
         tabPanel("Start",
                  numericInput("ID", "Student Number", 0),
                  sliderInput("N", "Sample Size per Group", 30, 70, 50),
+                 numericInput("age", "Mean age", 21, 0),
+                 fluidRow(
+                   column(6,
+                          numericInput("minAge", "Minimumn age", NA, 0)
+                   ),
+                   column(6,
+                          uiOutput("maxAge")
+                   )
+                 ),
                  uiOutput("females"),
                  uiOutput("males"),
                  selectInput("design", "Design", c("2 independent 3 repeated" = "2x3",
@@ -56,10 +65,10 @@ dashboardPage(skin = "black",
                  h4("Restrictions"),
                  fluidRow(
                    column(6,
-                          uiOutput("minDVt")
+                          uiOutput("minDV")
                    ),
                    column(6,
-                          uiOutput("maxDVt")
+                          uiOutput("maxDV")
                    )
                  )
         ),
@@ -102,18 +111,41 @@ dashboardPage(skin = "black",
                  h4("Restrictions"),
                  fluidRow(
                    column(6,
-                          uiOutput("minMVt")
+                          uiOutput("minMV")
                    ),
                    column(6,
-                          uiOutput("maxMVt")
+                          uiOutput("maxMV")
                    )
                  )
         ),
         tabPanel("Extra",
-                 h5("If you want to add an extra continuous and/or categorical variable, fill in this form."),
-                 textInput("v1", "Variable name"),
-                 numericInput("v1Min", "Min", 0),
-                 numericInput("v1Max", "Max", 0)
+                 checkboxGroupInput("extra", "Extra Variables",
+                                    choices = list("Categorical" = "cat", "Continuous" = "cont")
+                 ),
+                 conditionalPanel("input.extra.indexOf('cat') > -1",
+                                  numericInput("lvl", "Number of categories", 2, min = 2, width = "50%"),
+                                  radioButtons("catDif", "Probability the same?",
+                                               choices = list("Same" = "same", "Different" = "different")
+                                  ),
+                                  fluidRow(
+                                    uiOutput("pCats"),
+                                    uiOutput("pCats1"),
+                                    uiOutput("pCats2"),
+                                    uiOutput("pCats3")
+                                  )
+                 ),
+                 conditionalPanel("input.extra.indexOf('cont') > -1",
+                                  textInput("nameCat", "Variable name"),
+                                  fluidRow(
+                                    column(6,
+                                           numericInput("minCont", "Minimum", NA)
+                                    ),
+                                    column(6,
+                                           uiOutput("maxCont")
+                                    )
+                                  )
+
+                 )
         )
       ),
       box(

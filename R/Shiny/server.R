@@ -83,10 +83,10 @@ shinyServer(function(input, output,session) {
     }
   })
 
-  output$minDVt <- renderUI({
+  output$minDV <- renderUI({
     numericInput("minDV", "Minimum", NA, max = (min(meansDV()) - 1))
   })
-  output$maxDVt <- renderUI({
+  output$maxDV <- renderUI({
     numericInput("maxDV", "Maximum", NA, min = (max(meansDV()) + 1))
   })
 
@@ -161,12 +161,69 @@ shinyServer(function(input, output,session) {
     }
   })
 
-  output$minMVt <- renderUI({
+  output$minMV <- renderUI({
     numericInput("minMV", "Minimum", NA, max = (min(meansMV()) - 1))
   })
-  output$maxMVt <- renderUI({
+  output$maxMV <- renderUI({
     numericInput("maxMV", "Maximum", NA, min = (max(meansMV()) + 1))
   })
+
+  ## max continuous variable
+  output$maxCont <- renderUI({
+    numericInput("maxCont", "Maximum", NA, min = (input$minCont + 1))
+  })
+
+  ## categorical variable
+  output$pCats <- renderUI({
+    conditionalPanel("input.catDif == 'same'",
+                     column(4,
+                            lapply(1:input$lvl, function(i){
+                              numericInput(paste0("pCat", i), paste("Category", i), NA, 0, 1, .1)
+                            })
+                     )
+    )
+  })
+
+  ## max age
+  output$maxAge <- renderUI({
+    numericInput("maxAge", "Maximum age", NA, min = (input$minAge + 1))
+  })
+
+
+  output$pCats1 <- renderUI({
+    conditionalPanel("input.catDif == 'different'",
+                     column(4,
+                            helpText(input$g1DV),
+                            lapply(1:input$lvl, function(i){
+                              numericInput(paste0("pCat1", i), paste("Category", i), NA, 0, 1, .1)
+                            })
+                     )
+    )
+  })
+
+  output$pCats2 <- renderUI({
+    conditionalPanel("input.catDif == 'different'",
+                     column(4,
+                            helpText(input$g2DV),
+                            lapply(1:input$lvl, function(i){
+                              numericInput(paste0("pCat2", i), paste("Category", i), NA, 0, 1, .1)
+                            })
+                     )
+    )
+  })
+
+  output$pCats3 <- renderUI({
+    conditionalPanel("input.catDif == 'different' & input.design == '3x2'",
+                     column(4,
+                            helpText(input$g3DV),
+                            lapply(1:input$lvl, function(i){
+                              numericInput(paste0("pCat3", i), paste("Category", i), NA, 0, 1, .1)
+                            })
+                     )
+    )
+  })
+
+
 
 
   simMatDV <- reactive({
@@ -200,12 +257,26 @@ shinyServer(function(input, output,session) {
 
   datDV <- reactive({
     set.seed(input$ID)
-    dataRRP(simMatDV(), input$N, input$design, input$gender, names = columnNamesDV())
+    dataRRP(dat = simMatDV(),
+            N = input$N,
+            design = input$design,
+            gender = input$gender,
+            age = input$age,
+            minAge = input$minAge,
+            maxAge = input$maxAge,
+            names = columnNamesDV())
   })
 
   datMV <- reactive({
     set.seed(input$ID + 1)
-    dataRRP(simMatMV(), input$N, input$design, input$gender, names = columnNamesMV())
+    dataRRP(dat = simMatMV(),
+            N = input$N,
+            design = input$design,
+            gender = input$gender,
+            age = input$age,
+            minAge = input$minAge,
+            maxAge = input$maxAge,
+            names = columnNamesMV())
   })
 
   output$plotDV <- renderPlot({

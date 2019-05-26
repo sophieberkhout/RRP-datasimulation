@@ -4,7 +4,7 @@ library(ggplot2)
 
 plotData <- function(data, ylab, glab, tixlab){
 
-  dataPlot <- data %>% gather(Time, Y, -Group, -Gender) # reshape into long format
+  dataPlot <- data %>% gather(Time, Y, -Group, -Gender, -Age) # reshape into long format
   dataPlot$Group <- as.factor(dataPlot$Group)
   dataPlot$Time <- factor(dataPlot$Time, levels = unique(dataPlot$Time))
 
