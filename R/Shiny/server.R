@@ -293,5 +293,21 @@ shinyServer(function(input, output,session) {
              c(input$t1MV, input$t2MV, input$t3MV))
   })
 
+  observeEvent(input$next1, {
+    updateTabsetPanel(session = session, inputId = "navbar", selected = "Start")
+  })
+
+  observeEvent(input$next2, {
+    updateTabsetPanel(session = session, inputId = "navbar", selected = "Dependent")
+  })
+
+  observeEvent(input$next3, {
+    updateTabsetPanel(session = session, inputId = "navbar", selected = "Manipulation")
+  })
+
+  observeEvent(input$next4, {
+    updateTabsetPanel(session = session, inputId = "navbar", selected = "Extra")
+  })
+
 })
 

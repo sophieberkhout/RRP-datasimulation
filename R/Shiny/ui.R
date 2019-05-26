@@ -1,14 +1,21 @@
 library(shiny)
-library(shinydashboard)
 
-dashboardPage(skin = "black",
-  dashboardHeader(title = "Data Simulation for Research and Report Practical",
-                  titleWidth = 500),
-  dashboardSidebar(disable = TRUE),
-  dashboardBody(
-    box(width = 6,
-      tabBox(width = 12, id = "sidePanel",
+navbarPage("", id = "navbar",
+        tabPanel("Hello",
+          sidebarLayout(
+            sidebarPanel(
+              h3("Research and Report Practical"),
+              h4("Data Simulation"),
+              fluidRow(column(12, offset = 8, actionButton("next1", "Next")))
+            ),
+            mainPanel(
+
+            )
+          )
+        ),
         tabPanel("Start",
+          sidebarLayout(
+            sidebarPanel(
                  numericInput("ID", "Student Number", 0),
                  sliderInput("N", "Sample Size per Group", 30, 70, 50),
                  numericInput("age", "Mean age", 21, 0),
@@ -24,9 +31,17 @@ dashboardPage(skin = "black",
                  uiOutput("males"),
                  selectInput("design", "Design", c("2 independent 3 repeated" = "2x3",
                                                    "3 independent 2 repeated" = "3x2")
-                 )
-        ),
-        tabPanel("Dependent",
+                 ),
+                 fluidRow(column(12, offset = 8, actionButton("next2", "Next")))
+            ),
+            mainPanel(
+
+            )
+        )
+      ),
+      tabPanel("Dependent",
+               sidebarLayout(
+        sidebarPanel(
                  h4("Dependent Variable"),
                  textInput("nameDV", "Variable name"),
                  helpText("Measurement moment"),
@@ -57,8 +72,6 @@ dashboardPage(skin = "black",
                           )
                    )
                  ),
-
-
                  h4("Expectations"),
                  uiOutput("expecDV2x3"),
                  uiOutput("expecDV3x2"),
@@ -70,9 +83,17 @@ dashboardPage(skin = "black",
                    column(6,
                           uiOutput("maxDV")
                    )
-                 )
+                 ),
+                 fluidRow(column(12, offset = 8, actionButton("next3", "Next")))
         ),
+        mainPanel(
+          plotOutput("plotDV")
+        )
+      )
+      ),
         tabPanel("Manipulation",
+                 sidebarLayout(
+          sidebarPanel(
                  h4("Manipulation Variable"),
                  textInput("nameMV", "Variable name"),
                  helpText("Measurement moment"),
@@ -103,8 +124,6 @@ dashboardPage(skin = "black",
                           )
                    )
                  ),
-
-
                  h4("Expectations"),
                  uiOutput("expecMV2x3"),
                  uiOutput("expecMV3x2"),
@@ -116,9 +135,15 @@ dashboardPage(skin = "black",
                    column(6,
                           uiOutput("maxMV")
                    )
-                 )
+                 ),
+                 fluidRow(column(12, offset = 8, actionButton("next4", "Next")))
         ),
+        mainPanel(plotOutput("plotMV"))
+      )
+      ),
         tabPanel("Extra",
+                 sidebarLayout(
+          sidebarPanel(
                  checkboxGroupInput("extra", "Extra Variables",
                                     choices = list("Categorical" = "cat", "Continuous" = "cont")
                  ),
@@ -146,20 +171,13 @@ dashboardPage(skin = "black",
                                   )
 
                  )
-        )
-      ),
-      box(
-        width = 5,
-        actionButton("submit", "Submit")
+          ),
+          mainPanel(
+
+          )
       )
-    ),
-    box(width = 6,
-        plotOutput("plotDV")
-    ),
-    box(width = 6,
-        plotOutput("plotMV")
     )
-  )
 )
+
 
 

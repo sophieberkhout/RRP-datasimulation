@@ -1,7 +1,7 @@
 mySample <- function(N, mu, min, max, Sigma){
   rm <- length(mu)
-  if (!all(dim(Sigma) == c(rm, rm)))
-    stop("incompatible arguments")
+   if (!all(dim(Sigma) == c(rm, rm)))
+     stop("incompatible arguments")
   eigenSigma <- eigen(Sigma, symmetric = TRUE)
   eigenValues <- eigenSigma$values
   if (!all(eigenValues >= -1e-06 * abs(eigenValues[1L])))
