@@ -1,6 +1,6 @@
 source(file = "mySample.R")
 
-dataRRP <- function(dat, N, design, gender, age, minAge, maxAge, names){
+dataRRP <- function(dat, N, design, gender, age,  names){
   if(design == "2x3"){
     dat <- as.data.frame(rbind(dat[, 1:3], dat[, 4:6]))
     names(dat) <- names
@@ -11,11 +11,11 @@ dataRRP <- function(dat, N, design, gender, age, minAge, maxAge, names){
     dat$Group <- rep(c(1, 2, 3), each = N)
   }
 
-  dat$Gender <- sample(1:2, N, replace = T, prob = c(gender/N, (1-gender/N)))
-  dat$Age <- rnorm(N, age)
-  if(is.na(minAge) & is.na(maxAge)){
-    dat$Age[dat$Age < minAge | dat$Age > maxAge] <- mean(dat$Age)
-  }
+  # dat$Gender <- sample(1:2, N, replace = T, prob = c(gender/N, (1-gender/N)))
+  # dat$Age <- rnorm(N, age)
+  # if(is.na(minAge) & is.na(maxAge)){
+  #   dat$Age[dat$Age < minAge | dat$Age > maxAge] <- mean(dat$Age)
+  # }
 
   return(dat)
  # return(dat[sample(nrow(dat)), ])

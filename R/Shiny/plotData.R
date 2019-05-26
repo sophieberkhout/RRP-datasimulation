@@ -4,7 +4,7 @@ library(ggplot2)
 
 plotData <- function(data, ylab, glab, tixlab){
 
-  dataPlot <- data %>% gather(Time, Y, -Group, -Gender, -Age) # reshape into long format
+  dataPlot <- data %>% gather(Time, Y, -Group) # reshape into long format
   dataPlot$Group <- as.factor(dataPlot$Group)
   dataPlot$Time <- factor(dataPlot$Time, levels = unique(dataPlot$Time))
 
@@ -16,8 +16,8 @@ plotData <- function(data, ylab, glab, tixlab){
     stat_summary(fun.data=mean_sdl, fun.args = list(mult=1),
                  geom="pointrange") +
     stat_summary(fun.y = mean, geom = "line") +
-    theme_classic() +
-    scale_colour_grey(labels = glab) +
+    theme_minimal() +
+    scale_colour_brewer(labels = glab, palette = "Dark2") +
     scale_x_discrete(labels = tixlab) +
     ylab(ylab) +
     theme(axis.title.x = element_blank())

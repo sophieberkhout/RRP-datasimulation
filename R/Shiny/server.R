@@ -2,6 +2,7 @@ source(file = "plotData.R")
 source(file = "mySample.R")
 source(file = "dataSimulation.R")
 source(file = "createSigma.R")
+library("haven")
 
 shinyServer(function(input, output,session) {
 
@@ -178,7 +179,7 @@ shinyServer(function(input, output,session) {
     conditionalPanel("input.catDif == 'same'",
                      column(4,
                             lapply(1:input$lvl, function(i){
-                              numericInput(paste0("pCat", i), paste("Category", i), NA, 0, 1, .1)
+                              numericInput(paste0("pCat.", i), paste("Category", i), NA, 0, 1, .1)
                             })
                      )
     )
@@ -195,7 +196,7 @@ shinyServer(function(input, output,session) {
                      column(4,
                             helpText(input$g1DV),
                             lapply(1:input$lvl, function(i){
-                              numericInput(paste0("pCat1", i), paste("Category", i), NA, 0, 1, .1)
+                              numericInput(paste0("pCat1.", i), paste("Category", i), NA, 0, 1, .1)
                             })
                      )
     )
@@ -206,7 +207,7 @@ shinyServer(function(input, output,session) {
                      column(4,
                             helpText(input$g2DV),
                             lapply(1:input$lvl, function(i){
-                              numericInput(paste0("pCat2", i), paste("Category", i), NA, 0, 1, .1)
+                              numericInput(paste0("pCat2.", i), paste("Category", i), NA, 0, 1, .1)
                             })
                      )
     )
@@ -217,7 +218,7 @@ shinyServer(function(input, output,session) {
                      column(4,
                             helpText(input$g3DV),
                             lapply(1:input$lvl, function(i){
-                              numericInput(paste0("pCat3", i), paste("Category", i), NA, 0, 1, .1)
+                              numericInput(paste0("pCat3.", i), paste("Category", i), NA, 0, 1, .1)
                             })
                      )
     )
@@ -228,6 +229,7 @@ shinyServer(function(input, output,session) {
 
   simMatDV <- reactive({
       set.seed(input$ID)
+      req(meansDV())
       mySample(N = input$N,
                mu = meansDV(),
                min = input$minDV,
@@ -238,6 +240,7 @@ shinyServer(function(input, output,session) {
 
   simMatMV <- reactive({
     set.seed(input$ID + 1)
+    req(meansMV())
     mySample(N = input$N,
              mu = meansMV(),
              min = input$minMV,
@@ -260,10 +263,6 @@ shinyServer(function(input, output,session) {
     dataRRP(dat = simMatDV(),
             N = input$N,
             design = input$design,
-            gender = input$gender,
-            age = input$age,
-            minAge = input$minAge,
-            maxAge = input$maxAge,
             names = columnNamesDV())
   })
 
@@ -272,10 +271,6 @@ shinyServer(function(input, output,session) {
     dataRRP(dat = simMatMV(),
             N = input$N,
             design = input$design,
-            gender = input$gender,
-            age = input$age,
-            minAge = input$minAge,
-            maxAge = input$maxAge,
             names = columnNamesMV())
   })
 
@@ -309,5 +304,49 @@ shinyServer(function(input, output,session) {
     updateTabsetPanel(session = session, inputId = "navbar", selected = "Extra")
   })
 
+  pCat <- reactive({
+    for(i in 1:input$lvl){
+      paste0("pCat.", i)
+    }
+  })
+
+  dat <- reactive({
+    set.seed(input$ID)
+    df <- cbind(subset(datDV(), select = -Group), datMV())
+    df$Gender <- sample(1:2, nrow(df), replace = T, prob = c(input$gender/input$N, (1-input$gender/input$N)))
+    df$Age <- round(rnorm(nrow(df), input$age))
+    df$Age[df$Age < input$minAge | df$Age > input$maxAge] <- mean(df$Age)
+    df$Gender <- ordered(df$Gender, levels = 1:2, labels = c("F", "M"))
+    df$Group <- ordered(df$Group, levels = 1:2, labels = c(input$g1DV, input$g2DV))
+    df <- df[sample(nrow(df)), ]
+    #df$Cat <- sample(1:input$lvl, input$N, replace = T, prob = pCat())
+    return(df)
+  })
+
+  output$table <- renderTable({
+    dat()
+  })
+
+  output$test <- renderTable({
+    c(input$gender, input$N,  0)
+  })
+
+  output$downloadData <- downloadHandler(
+    filename = "dataRRP.csv",
+    content = function(file) {
+      write.csv(dat(), file)
+    }
+  )
+
+  output$downloadDataSAV <- downloadHandler(
+    filename = "dataRRP.sav",
+    content = function(file) {
+      write.sav(dat(), file)
+    }
+  )
+
+
+
 })
+
 
