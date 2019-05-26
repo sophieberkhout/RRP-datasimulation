@@ -87,7 +87,7 @@ navbarPage("", id = "navbar",
                  fluidRow(column(12, offset = 8, actionButton("next3", "Next")))
         ),
         mainPanel(
-          plotOutput("plotDV")
+          plotOutput("plotDV", width = "500px", height = "350px")
         )
       )
       ),
@@ -138,7 +138,10 @@ navbarPage("", id = "navbar",
                  ),
                  fluidRow(column(12, offset = 8, actionButton("next4", "Next")))
         ),
-        mainPanel(plotOutput("plotMV"))
+        mainPanel(plotOutput("plotMV", width = "500px", height = "350px"),
+                  tableOutput("test"),
+                  tableOutput("table")
+        )
       )
       ),
         tabPanel("Extra",
@@ -170,7 +173,9 @@ navbarPage("", id = "navbar",
                                     )
                                   )
 
-                 )
+                 ),
+                 downloadButton('downloadData', 'Download'),
+                 downloadButton('downloadDataSAV', 'Download SAV')
           ),
           mainPanel(
 
