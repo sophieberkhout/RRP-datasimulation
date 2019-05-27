@@ -102,7 +102,7 @@ navbarPage("", id = "navbar",
                  fluidRow(column(12, offset = 8, actionButton("next3", "Next")))
         ),
         mainPanel(
-          plotOutput("plotDV", width = "500px", height = "350px")
+          plotOutput("plotDV", width = "600px", height = "400px")
         )
       )
       ),
@@ -157,7 +157,7 @@ navbarPage("", id = "navbar",
                  fluidRow(column(12, offset = 8, actionButton("next4", "Next")))
         ),
         mainPanel(
-          plotOutput("plotMV", width = "500px", height = "350px")
+          plotOutput("plotMV", width = "600px", height = "400px")
         )
       )
       ),
@@ -168,6 +168,7 @@ navbarPage("", id = "navbar",
                                     choices = list("Categorical" = "cat", "Continuous" = "cont")
                  ),
                  conditionalPanel("input.extra.indexOf('cat') > -1",
+                                  h4("Categorical Variable"),
                                   numericInput("lvl", "Number of categories", 2, min = 2, width = "50%"),
                                   radioButtons("catDif", "Probability the same?",
                                                choices = list("Same" = "same", "Different" = "different")
@@ -180,7 +181,9 @@ navbarPage("", id = "navbar",
                                   )
                  ),
                  conditionalPanel("input.extra.indexOf('cont') > -1",
-                                  textInput("nameCat", "Variable name"),
+                                  h4("Continuous Variable"),
+                                  textInput("nameCont", "Variable name"),
+                                  numericInput("meanCont", "Mean", NA, width = "50%"),
                                   fluidRow(
                                     column(6,
                                            numericInput("minCont", "Minimum", NA)
@@ -188,7 +191,8 @@ navbarPage("", id = "navbar",
                                     column(6,
                                            uiOutput("maxCont")
                                     )
-                                  )
+                                  ),
+                                  numericInput("corCont", "Expected correlation with dependent variable", NA, -1, 1, .1, width = "50%")
 
                  ),
                  hr(),
