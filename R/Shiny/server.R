@@ -6,8 +6,12 @@ library("haven")
 
 shinyServer(function(input, output,session) {
 
+  output$logo <- renderUI({
+    tags$img(src = "https://shklinkenberg.github.io/uva_style/images/logo_uva.png", width = "30%")
+  })
+
   output$females <- renderUI({
-    numericInput("gender", "Number of females", round(input$N/2, 0), 0, input$N)
+    numericInput("gender", "Number of females", round(input$N/2, 0), 0, input$N, width = "50%")
   })
   output$males <- renderUI({
     helpText(HTML("<strong>Number of males</strong></br>&emsp;"), input$N - input$gender)
@@ -289,19 +293,23 @@ shinyServer(function(input, output,session) {
   })
 
   observeEvent(input$next1, {
-    updateTabsetPanel(session = session, inputId = "navbar", selected = "Start")
+    updateTabsetPanel(session = session, inputId = "navbar", selected = "Descriptives")
   })
 
   observeEvent(input$next2, {
-    updateTabsetPanel(session = session, inputId = "navbar", selected = "Dependent")
+    updateTabsetPanel(session = session, inputId = "navbar", selected = "Dependent Variable")
   })
 
   observeEvent(input$next3, {
-    updateTabsetPanel(session = session, inputId = "navbar", selected = "Manipulation")
+    updateTabsetPanel(session = session, inputId = "navbar", selected = "Manipulation Check")
   })
 
   observeEvent(input$next4, {
-    updateTabsetPanel(session = session, inputId = "navbar", selected = "Extra")
+    updateTabsetPanel(session = session, inputId = "navbar", selected = "Extra Variables")
+  })
+
+  observeEvent(input$next5, {
+    updateTabsetPanel(session = session, inputId = "navbar", selected = "Download Data")
   })
 
   pCat <- reactive({
@@ -327,21 +335,17 @@ shinyServer(function(input, output,session) {
     dat()
   })
 
-  output$test <- renderTable({
-    c(input$gender, input$N,  0)
-  })
-
   output$downloadData <- downloadHandler(
     filename = "dataRRP.csv",
     content = function(file) {
-      write.csv(dat(), file)
+      write.csv(dat(), file, row.names = F)
     }
   )
 
   output$downloadDataSAV <- downloadHandler(
     filename = "dataRRP.sav",
     content = function(file) {
-      write.sav(dat(), file)
+      write.sav(dat(), file, row.names = F)
     }
   )
 

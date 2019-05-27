@@ -14,8 +14,8 @@ plotData <- function(data, ylab, glab, tixlab){
                   group = Group,
                   colour = Group)) +
     stat_summary(fun.data=mean_sdl, fun.args = list(mult=1),
-                 geom="pointrange") +
-    stat_summary(fun.y = mean, geom = "line") +
+                 geom = "pointrange", size = .75, position = position_dodge(width = .1)) +
+    stat_summary(fun.y = mean, geom = "line", size = .75, position = position_dodge(width = .1)) +
     theme_minimal() +
     scale_colour_brewer(labels = glab, palette = "Dark2") +
     scale_x_discrete(labels = tixlab) +

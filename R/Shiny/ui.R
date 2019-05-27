@@ -2,12 +2,19 @@ library(shiny)
 library(shinythemes)
 
 navbarPage("", id = "navbar",
+           windowTitle = "Data Simulation - Research and Report Practical",
            theme = shinytheme("simplex"),
-        tabPanel("Hello",
+        tabPanel("Home",
           sidebarLayout(
             sidebarPanel(
-              h3("Research and Report Practical"),
-              h4("Data Simulation"),
+              HTML('<img src="uvalogo.jpg", width = "20%">'),
+              h3("Data Simulation"),
+              h4("Research and Report Practical"),
+              p("With this app you can simulate your own data for the writing course."),
+              hr(),
+              p(HTML("<strong>IMPORTANT:</strong> Do not forget to fill in your student number!")),
+              numericInput("ID", "Student Number", 0),
+              hr(),
               fluidRow(column(12, offset = 8, actionButton("next1", "Next")))
             ),
             mainPanel(
@@ -15,12 +22,12 @@ navbarPage("", id = "navbar",
             )
           )
         ),
-        tabPanel("Start",
+        tabPanel("Descriptives",
           sidebarLayout(
             sidebarPanel(
-                 numericInput("ID", "Student Number", 0),
                  sliderInput("N", "Sample Size per Group", 30, 70, 50),
-                 numericInput("age", "Mean age", 21, 0),
+                 hr(),
+                 numericInput("age", "Mean age", 21, 0, width = "50%"),
                  fluidRow(
                    column(6,
                           numericInput("minAge", "Minimumn age", NA, 0)
@@ -29,11 +36,14 @@ navbarPage("", id = "navbar",
                           uiOutput("maxAge")
                    )
                  ),
+                 hr(),
                  uiOutput("females"),
                  uiOutput("males"),
+                 hr(),
                  selectInput("design", "Design", c("2 independent 3 repeated" = "2x3",
                                                    "3 independent 2 repeated" = "3x2")
                  ),
+                 hr(),
                  fluidRow(column(12, offset = 8, actionButton("next2", "Next")))
             ),
             mainPanel(
@@ -41,7 +51,7 @@ navbarPage("", id = "navbar",
             )
         )
       ),
-      tabPanel("Dependent",
+      tabPanel("Dependent Variable",
                sidebarLayout(
         sidebarPanel(
                  h4("Dependent Variable"),
@@ -74,9 +84,11 @@ navbarPage("", id = "navbar",
                           )
                    )
                  ),
+                 hr(),
                  h4("Expectations"),
                  uiOutput("expecDV2x3"),
                  uiOutput("expecDV3x2"),
+                 hr(),
                  h4("Restrictions"),
                  fluidRow(
                    column(6,
@@ -86,6 +98,7 @@ navbarPage("", id = "navbar",
                           uiOutput("maxDV")
                    )
                  ),
+                 hr(),
                  fluidRow(column(12, offset = 8, actionButton("next3", "Next")))
         ),
         mainPanel(
@@ -93,10 +106,10 @@ navbarPage("", id = "navbar",
         )
       )
       ),
-        tabPanel("Manipulation",
+        tabPanel("Manipulation Check",
                  sidebarLayout(
           sidebarPanel(
-                 h4("Manipulation Variable"),
+                 h4("Manipulation Check"),
                  textInput("nameMV", "Variable name"),
                  helpText("Measurement moment"),
                  fluidRow(
@@ -126,10 +139,12 @@ navbarPage("", id = "navbar",
                           )
                    )
                  ),
+                 hr(),
                  h4("Expectations"),
                  uiOutput("expecMV2x3"),
                  uiOutput("expecMV3x2"),
                  h4("Restrictions"),
+                 hr(),
                  fluidRow(
                    column(6,
                           uiOutput("minMV")
@@ -138,15 +153,15 @@ navbarPage("", id = "navbar",
                           uiOutput("maxMV")
                    )
                  ),
+                 hr(),
                  fluidRow(column(12, offset = 8, actionButton("next4", "Next")))
         ),
-        mainPanel(plotOutput("plotMV", width = "500px", height = "350px"),
-                  tableOutput("test"),
-                  tableOutput("table")
+        mainPanel(
+          plotOutput("plotMV", width = "500px", height = "350px")
         )
       )
       ),
-        tabPanel("Extra",
+        tabPanel("Extra Variables",
                  sidebarLayout(
           sidebarPanel(
                  checkboxGroupInput("extra", "Extra Variables",
@@ -176,12 +191,24 @@ navbarPage("", id = "navbar",
                                   )
 
                  ),
-                 downloadButton('downloadData', 'Download'),
-                 downloadButton('downloadDataSAV', 'Download SAV')
+                 hr(),
+                 fluidRow(column(12, offset = 8, actionButton("next5", "Next")))
           ),
           mainPanel(
 
           )
+      )
+    ),
+    tabPanel("Download Data",
+      sidebarLayout(
+        sidebarPanel(
+          downloadButton('downloadData', 'Download .CSV'),
+          hr(),
+          downloadButton('downloadDataSAV', 'Download .SAV')
+        ),
+        mainPanel(
+          tableOutput("table")
+        )
       )
     )
 )
