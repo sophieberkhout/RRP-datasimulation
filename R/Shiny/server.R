@@ -180,56 +180,22 @@ shinyServer(function(input, output,session) {
 
   ## categorical variable
   output$pCats <- renderUI({
-    conditionalPanel("input.catDif == 'same'",
-                     column(4,
-                            lapply(1:input$lvl, function(i){
-                              numericInput(paste0("pCat.", i), paste("Category", i), NA, 0, 1, .1)
-                            })
-                     )
-    )
+    lapply(1:input$lvl, function(i){
+      fluidRow(
+        column(6,
+               textInput(paste0("nameCat.", i), paste0(i, ".", " ", "Name"), paste0("Cat", i))
+        ),
+        column(6,
+               numericInput(paste0("pCat.", i), "Probability", 1/input$lvl, 0, 1, .1)
+        )
+      )
+    })
   })
 
   ## max age
   output$maxAge <- renderUI({
     numericInput("maxAge", "Maximum age", NA, min = (input$minAge + 1))
   })
-
-
-  output$pCats1 <- renderUI({
-    conditionalPanel("input.catDif == 'different'",
-                     column(4,
-                            helpText(input$g1DV),
-                            lapply(1:input$lvl, function(i){
-                              numericInput(paste0("pCat1.", i), paste("Category", i), NA, 0, 1, .1)
-                            })
-                     )
-    )
-  })
-
-  output$pCats2 <- renderUI({
-    conditionalPanel("input.catDif == 'different'",
-                     column(4,
-                            helpText(input$g2DV),
-                            lapply(1:input$lvl, function(i){
-                              numericInput(paste0("pCat2.", i), paste("Category", i), NA, 0, 1, .1)
-                            })
-                     )
-    )
-  })
-
-  output$pCats3 <- renderUI({
-    conditionalPanel("input.catDif == 'different' & input.design == '3x2'",
-                     column(4,
-                            helpText(input$g3DV),
-                            lapply(1:input$lvl, function(i){
-                              numericInput(paste0("pCat3.", i), paste("Category", i), NA, 0, 1, .1)
-                            })
-                     )
-    )
-  })
-
-
-
 
   simMatDV <- reactive({
       set.seed(input$ID)
@@ -313,26 +279,52 @@ shinyServer(function(input, output,session) {
   })
 
   pCat <- reactive({
-    for(i in 1:input$lvl){
-      paste0("pCat.", i)
-    }
+    sapply(1:input$lvl, function(i){
+      input[[paste0("pCat.", i)]]
+    })
+  })
+
+  nameCat <- reactive({
+    sapply(1:input$lvl, function(i){
+      input[[paste0("nameCat.", i)]]
+    })
+  })
+
+  rawDataDV <- reactive({
+    subset(datDV(), select = -Group)
   })
 
   dat <- reactive({
     set.seed(input$ID)
-    df <- cbind(subset(datDV(), select = -Group), datMV())
+    df <- cbind(rawDataDV(), datMV())
     df$Gender <- sample(1:2, nrow(df), replace = T, prob = c(input$gender/input$N, (1-input$gender/input$N)))
     df$Age <- round(rnorm(nrow(df), input$age))
     df$Age[df$Age < input$minAge | df$Age > input$maxAge] <- mean(df$Age)
     df$Gender <- ordered(df$Gender, levels = 1:2, labels = c("F", "M"))
-    df$Group <- ordered(df$Group, levels = 1:2, labels = c(input$g1DV, input$g2DV))
+
+    attr(df$Group, "labels") <- unique(df$Group)
+    names(attr(df$Group, "labels")) <- c(input$g1DV, input$g2DV)
+
+    #df$Group <- ordered(df$Group, levels = 1:2, labels = c(input$g1DV, input$g2DV))
+    if(!is.null(input$extra) && input$extra == "cat"){
+      df$Cat <- sample(1:input$lvl, nrow(df), replace = T, prob = pCat())
+      df$Cat <- ordered(df$Cat, levels = 1:input$lvl, labels = nameCat())
+    }
+    if(!is.null(input$extra) && input$extra == "cont"){
+      df$Cont <- rnorm(nrow(df), (input$corCont*rowMeans(rawDataDV()))-rowMeans(rawDataDV()), sqrt(1-input$corCont^2))
+    }
+
+    set.seed(input$ID)
     df <- df[sample(nrow(df)), ]
-    #df$Cat <- sample(1:input$lvl, input$N, replace = T, prob = pCat())
     return(df)
   })
 
   output$table <- renderTable({
     dat()
+  })
+
+  output$test <- renderTable({
+    pCat()
   })
 
   output$downloadData <- downloadHandler(
@@ -345,7 +337,7 @@ shinyServer(function(input, output,session) {
   output$downloadDataSAV <- downloadHandler(
     filename = "dataRRP.sav",
     content = function(file) {
-      write.sav(dat(), file, row.names = F)
+      write_sav(dat(), file)
     }
   )
 

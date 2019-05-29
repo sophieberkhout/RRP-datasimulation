@@ -24,7 +24,9 @@ plotData <- function(data, ylab, glab, tixlab){
           axis.text = element_text(size = 12),
           axis.title = element_text(size = 12),
           legend.text = element_text(size = 12),
-          legend.title = element_text(size = 12))
+          legend.title = element_blank(),
+          legend.position = "bottom",
+          legend.spacing.x = unit(1.0, 'cm'))
 
   return(p)
 

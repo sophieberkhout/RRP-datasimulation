@@ -168,21 +168,17 @@ navbarPage("", id = "navbar",
                                     choices = list("Categorical" = "cat", "Continuous" = "cont")
                  ),
                  conditionalPanel("input.extra.indexOf('cat') > -1",
+                                  hr(),
                                   h4("Categorical Variable"),
                                   numericInput("lvl", "Number of categories", 2, min = 2, width = "50%"),
-                                  radioButtons("catDif", "Probability the same?",
-                                               choices = list("Same" = "same", "Different" = "different")
-                                  ),
-                                  fluidRow(
-                                    uiOutput("pCats"),
-                                    uiOutput("pCats1"),
-                                    uiOutput("pCats2"),
-                                    uiOutput("pCats3")
-                                  )
+                                  hr(),
+                                  uiOutput("pCats")
                  ),
                  conditionalPanel("input.extra.indexOf('cont') > -1",
+                                  hr(),
                                   h4("Continuous Variable"),
-                                  textInput("nameCont", "Variable name"),
+                                  textInput("nameCont", "Variable name", "Continuous"),
+                                  hr(),
                                   numericInput("meanCont", "Mean", NA, width = "50%"),
                                   fluidRow(
                                     column(6,
@@ -192,14 +188,16 @@ navbarPage("", id = "navbar",
                                            uiOutput("maxCont")
                                     )
                                   ),
-                                  numericInput("corCont", "Expected correlation with dependent variable", NA, -1, 1, .1, width = "50%")
+                                  hr(),
+                                  helpText("Expected correlation with dependent variable (can be negative)"),
+                                  numericInput("corCont", "Correlation", .5, -1, 1, .1, width = "50%")
 
                  ),
                  hr(),
                  fluidRow(column(12, offset = 8, actionButton("next5", "Next")))
           ),
           mainPanel(
-
+            tableOutput("test")
           )
       )
     ),
