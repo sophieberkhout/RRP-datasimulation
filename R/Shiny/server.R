@@ -81,13 +81,6 @@ shinyServer(function(input, output,session) {
     )
   })
 
-  meansDV <- reactive({
-    if(input$design == "2x3"){
-      c(input$DV2x3.11, input$DV2x3.12, input$DV2x3.13, input$DV2x3.21, input$DV2x3.22, input$DV2x3.23)
-    } else {
-      c(input$DV3x2.11, input$DV3x2.12, input$DV3x2.21, input$DV3x2.22, input$DV3x2.31, input$DV3x2.32)
-    }
-  })
 
   output$minDV <- renderUI({
     numericInput("minDV", "Minimum", NA, max = (min(meansDV()) - 1))
@@ -159,6 +152,15 @@ shinyServer(function(input, output,session) {
     )
   })
 
+
+  meansDV <- reactive({
+    if(input$design == "2x3"){
+      c(input$DV2x3.11, input$DV2x3.12, input$DV2x3.13, input$DV2x3.21, input$DV2x3.22, input$DV2x3.23)
+    } else {
+      c(input$DV3x2.11, input$DV3x2.12, input$DV3x2.21, input$DV3x2.22, input$DV3x2.31, input$DV3x2.32)
+    }
+  })
+
   meansMV <- reactive({
     if(input$design == "2x3"){
       c(input$MV2x3.11, input$MV2x3.12, input$MV2x3.13, input$MV2x3.21, input$MV2x3.22, input$MV2x3.23)
@@ -200,24 +202,19 @@ shinyServer(function(input, output,session) {
 
   simMatDV <- reactive({
       set.seed(input$ID)
-      req(meansDV())
+      muDV <- meansDV()
+      muMV <- meansMV()
+      if(is.null(muDV)){
+        muDV <- rep(0, 6)
+      }
+      if(is.null(muMV)){
+        muMV <- rep(0, 6)
+      }
+      mu <- c(muDV, muMV)
       mySample(N = input$N,
-               mu = meansDV(),
-               min = input$minDV,
-               max = input$maxDV,
+               mu = mu,
                Sigma = createSigma(input$design)
       )
-  })
-
-  simMatMV <- reactive({
-    set.seed(input$ID + 1)
-    req(meansMV())
-    mySample(N = input$N,
-             mu = meansMV(),
-             min = input$minMV,
-             max = input$maxMV,
-             Sigma = createSigma(input$design)
-    )
   })
 
   columnNamesDV <- reactive({
@@ -231,16 +228,20 @@ shinyServer(function(input, output,session) {
 
   datDV <- reactive({
     set.seed(input$ID)
-    dataRRP(dat = simMatDV(),
+    dataRRP(dat = simMatDV()[, 1:6],
             N = input$N,
+            min = input$minDV,
+            max = input$maxDV,
             design = input$design,
             names = columnNamesDV())
   })
 
   datMV <- reactive({
-    set.seed(input$ID + 1)
-    dataRRP(dat = simMatMV(),
+    set.seed(input$ID)
+    dataRRP(dat = simMatDV()[, 7:12],
             N = input$N,
+            min = input$minMV,
+            max = input$maxMV,
             design = input$design,
             names = columnNamesMV())
   })
@@ -292,28 +293,30 @@ shinyServer(function(input, output,session) {
   })
 
   rawDataDV <- reactive({
-    subset(datDV(), select = -Group)
+    subset(datDV(), select = -group)
   })
+
+
 
   dat <- reactive({
     set.seed(input$ID)
     df <- cbind(rawDataDV(), datMV())
-    df$Gender <- sample(1:2, nrow(df), replace = T, prob = c(input$gender/input$N, (1-input$gender/input$N)))
-    df$Age <- round(rnorm(nrow(df), input$age))
-    df$Age[df$Age < input$minAge | df$Age > input$maxAge] <- mean(df$Age)
-    df$Gender <- ordered(df$Gender, levels = 1:2, labels = c("F", "M"))
+    df$gender <- sample(1:2, nrow(df), replace = T, prob = c(input$gender/input$N, (1-input$gender/input$N)))
+    df$age <- round(rnorm(nrow(df), input$age))
+    df$age[df$age < input$minAge | df$age > input$maxAge] <- mean(df$age)
+    df$gender <- ordered(df$gender, levels = 1:2, labels = c("F", "M"))
 
-    attr(df$Group, "labels") <- unique(df$Group)
-    names(attr(df$Group, "labels")) <- c(input$g1, input$g2)
+    attr(df$group, "labels") <- unique(df$group)
+    names(attr(df$group, "labels")) <- c(input$g1, input$g2)
 
-    #df$Group <- ordered(df$Group, levels = 1:2, labels = c(input$g1, input$g2))
+    #df$group <- ordered(df$group, levels = 1:2, labels = c(input$g1, input$g2))
     if(!is.null(input$extra) && input$extra == "cat"){
-      df$Cat <- sample(1:input$lvl, nrow(df), replace = T, prob = pCat())
-      df$Cat <- ordered(df$Cat, levels = 1:input$lvl, labels = nameCat())
+      df$cat <- sample(1:input$lvl, nrow(df), replace = T, prob = pCat())
+      df$cat <- ordered(df$cat, levels = 1:input$lvl, labels = nameCat())
     }
 
     if(!is.null(input$extra) && (input$extra == "cont" || identical(input$extra, c("cat", "cont")))){
-      df$Cont <- sampleCont(nrow(df), rowMeans(rawDataDV()), input$corCont, input$meanCont, input$minCont, input$maxCont)
+      df$cont <- sampleCont(nrow(df), rowMeans(rawDataDV()), input$corCont, input$meanCont, input$minCont, input$maxCont)
     }
 
     set.seed(input$ID)

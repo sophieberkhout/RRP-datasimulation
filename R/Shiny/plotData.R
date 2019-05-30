@@ -4,15 +4,15 @@ library(ggplot2)
 
 plotData <- function(data, ylab, glab, tixlab){
 
-  dataPlot <- data %>% gather(Time, Y, -Group) # reshape into long format
-  dataPlot$Group <- as.factor(dataPlot$Group)
+  dataPlot <- data %>% gather(Time, Y, -group) # reshape into long format
+  dataPlot$group <- as.factor(dataPlot$group)
   dataPlot$Time <- factor(dataPlot$Time, levels = unique(dataPlot$Time))
 
   p <- ggplot(data = dataPlot,
               aes(x = Time,
                   y = Y,
-                  group = Group,
-                  colour = Group)) +
+                  group = group,
+                  colour = group)) +
     stat_summary(fun.data = mean_sdl, fun.args = list(mult = 1),
                  geom = "pointrange", size = .75, position = position_dodge(width = .1)) +
     stat_summary(fun.y = mean, geom = "line", size = .75, position = position_dodge(width = .1)) +
@@ -26,7 +26,8 @@ plotData <- function(data, ylab, glab, tixlab){
           legend.text = element_text(size = 12),
           legend.title = element_blank(),
           legend.position = "bottom",
-          legend.spacing.x = unit(1.0, 'cm'))
+          legend.spacing.x = unit(1.0, 'cm'),
+          panel.grid.major.x = element_blank())
 
   return(p)
 

@@ -1,4 +1,4 @@
-mySample <- function(N, mu, min, max, Sigma){
+mySample <- function(N, mu, Sigma){
   rm <- length(mu)
    if (!all(dim(Sigma) == c(rm, rm)))
      stop("incompatible arguments")
@@ -11,11 +11,7 @@ mySample <- function(N, mu, min, max, Sigma){
   if (N == 1)
     m <- drop(m)
   else m <- t(m)
-  if(is.na(min) & is.na(max)){
-    return(m)
-  } else {
-    m[m < min | m > max] <- mean(m)
-    return(m)
-  }
+  return(m)
 }
+
 

@@ -1,14 +1,15 @@
 source(file = "mySample.R")
 
-dataRRP <- function(dat, N, design, gender, age,  names){
+dataRRP <- function(dat, N, min, max, design, names){
+  dat[dat < min | dat > max] <- mean(dat)
   if(design == "2x3"){
     dat <- as.data.frame(rbind(dat[, 1:3], dat[, 4:6]))
     names(dat) <- names
-    dat$Group <- rep(c(1, 2), each = N)
+    dat$group <- rep(c(1, 2), each = N)
   } else {
     dat <- as.data.frame(rbind(dat[, 1:2], dat[, 3:4], dat[, 5:6]))
     names(dat) <- names[-3]
-    dat$Group <- rep(c(1, 2, 3), each = N)
+    dat$group <- rep(c(1, 2, 3), each = N)
   }
 
   # dat$Gender <- sample(1:2, N, replace = T, prob = c(gender/N, (1-gender/N)))
