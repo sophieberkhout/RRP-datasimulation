@@ -255,6 +255,14 @@ shinyServer(function(input, output,session) {
   })
 
   output$plotDV <- renderPlot({
+    validate(
+      if(!is.na(input$minDV)){
+        need(all(input$minDV < meansDV()), "Your minimum has to be smaller than the means!")
+      },
+      if(!is.na(input$maxDV)){
+        need(all(input$maxDV > meansDV()), "Your maximum has to be larger than the means!")
+      }
+    )
     plotData(datDV(),
              input$nameDV,
              c(input$g1, input$g2, input$g3),
@@ -262,6 +270,15 @@ shinyServer(function(input, output,session) {
   })
 
   output$plotMV <- renderPlot({
+    validate(
+      if(!is.na(input$minMV)){
+        need(all(input$minMV < meansMV()), "Your minimum has to be smaller than the means!")
+      },
+      if(!is.na(input$maxMV)){
+        need(all(input$maxMV > meansMV()), "Your maximum has to be larger than the means!")
+      }
+    )
+
     plotData(datMV(),
              input$nameMV,
              c(input$g1, input$g2, input$g3),
@@ -349,6 +366,42 @@ shinyServer(function(input, output,session) {
   output$dir <- renderText({
     paste("Relationship with", input$nameDV)
   })
+
+  output$descText <- renderText({
+    validate(
+      need(input$age, "Provide the mean age!"),
+      if(!is.na(input$minAge)){
+        need(input$minAge < input$age, "Your minimum has to be smaller than the mean age!")
+      },
+      if(!is.na(input$maxAge)){
+        need(input$maxAge > input$age, "Your maximum has to be larger than the mean age!")
+      }
+    )
+  })
+
+  output$extraTextCont <- renderText({
+    req(input$extra == "cont")
+    if(a = b){
+
+    }
+    validate(
+      need(input$meanCont, paste0("Provide the mean for ", input$nameCont, "!")),
+      if(!is.na(input$minCont)){
+        need(input$minCont < input$meanCont, paste0("Your minimum has to be smaller than the mean ", input$nameCont, "!"))
+      },
+      if(!is.na(input$maxCont)){
+        need(input$maxCont > input$meanCont, paste0("Your maximum has to be larger than the mean ", input$nameCont, "!"))
+      }
+    )
+  })
+
+  output$extraTextCat <- renderText({
+    req(input$extra == "cat")
+    validate(
+      need(!any(is.na(pCat())), "Provide a probability for each category!")
+    )
+  })
+
 
   output$downloadData <- downloadHandler(
     filename = "dataRRP.csv",

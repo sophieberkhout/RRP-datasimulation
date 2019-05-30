@@ -47,7 +47,7 @@ navbarPage("", id = "navbar",
                  fluidRow(column(12, offset = 8, actionButton("next2", "Next")))
             ),
             mainPanel(
-
+              textOutput("descText")
             )
         )
       ),
@@ -158,7 +158,7 @@ navbarPage("", id = "navbar",
                                   h4("Continuous Variable"),
                                   textInput("nameCont", "Variable name", "cont"),
                                   hr(),
-                                  numericInput("meanCont", "Mean", 0, width = "50%"),
+                                  numericInput("meanCont", "Mean", NA, width = "50%"),
                                   fluidRow(
                                     column(6,
                                            uiOutput("minCont")
@@ -176,7 +176,8 @@ navbarPage("", id = "navbar",
                  fluidRow(column(12, offset = 8, actionButton("next5", "Next")))
           ),
           mainPanel(
-
+              textOutput("extraTextCat"),
+              textOutput("extraTextCont")
             )
       )
     ),
