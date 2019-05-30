@@ -59,28 +59,28 @@ navbarPage("", id = "navbar",
                  helpText("Measurement moment"),
                  fluidRow(
                    column(4,
-                          textInput("t1DV", "First", "1")
+                          textInput("t1", "First", "one")
                    ),
                    column(4,
-                          textInput("t2DV", "Second", "2")
+                          textInput("t2", "Second", "two")
                    ),
                    column(4,
                           conditionalPanel("input.design == '2x3'",
-                                           textInput("t3DV", "Last", "3")
+                                           textInput("t3", "Last", "three")
                           )
                    )
                  ),
                  helpText("Group names"),
                  fluidRow(
                    column(4,
-                          textInput("g1DV", "Group 1", "Control")
+                          textInput("g1", "Group 1", "control")
                    ),
                    column(4,
-                          textInput("g2DV", "Group 2", "Treatment")
+                          textInput("g2", "Group 2", "treatment")
                    ),
                    column(4,
                           conditionalPanel("input.design == '3x2'",
-                                           textInput("g3DV", "Group 3", "Placebo")
+                                           textInput("g3", "Group 3", "Placebo")
                           )
                    )
                  ),
@@ -102,6 +102,7 @@ navbarPage("", id = "navbar",
                  fluidRow(column(12, offset = 8, actionButton("next3", "Next")))
         ),
         mainPanel(
+          h4("Dependent Variable per Group over Time"),
           plotOutput("plotDV", width = "600px", height = "400px")
         )
       )
@@ -111,34 +112,6 @@ navbarPage("", id = "navbar",
           sidebarPanel(
                  h4("Manipulation Check"),
                  textInput("nameMV", "Variable name"),
-                 helpText("Measurement moment"),
-                 fluidRow(
-                   column(4,
-                          textInput("t1MV", "First", "1")
-                   ),
-                   column(4,
-                          textInput("t2MV", "Second", "2")
-                   ),
-                   column(4,
-                          conditionalPanel("input.design == '2x3'",
-                                           textInput("t3MV", "Last", "3")
-                          )
-                   )
-                 ),
-                 helpText("Group names"),
-                 fluidRow(
-                   column(4,
-                          textInput("g1MV", "Group 1", "Control")
-                   ),
-                   column(4,
-                          textInput("g2MV", "Group 2", "Treatment")
-                   ),
-                   column(4,
-                          conditionalPanel("input.design == '3x2'",
-                                           textInput("g3MV", "Group 3", "Placebo")
-                          )
-                   )
-                 ),
                  hr(),
                  h4("Expectations"),
                  uiOutput("expecMV2x3"),
@@ -157,6 +130,7 @@ navbarPage("", id = "navbar",
                  fluidRow(column(12, offset = 8, actionButton("next4", "Next")))
         ),
         mainPanel(
+          h4("Manipulation Variable per Group over Time"),
           plotOutput("plotMV", width = "600px", height = "400px")
         )
       )
@@ -179,7 +153,7 @@ navbarPage("", id = "navbar",
                                   h4("Continuous Variable"),
                                   textInput("nameCont", "Variable name", "Continuous"),
                                   hr(),
-                                  numericInput("meanCont", "Mean", NA, width = "50%"),
+                                  numericInput("meanCont", "Mean", 0, width = "50%"),
                                   fluidRow(
                                     column(6,
                                            numericInput("minCont", "Minimum", NA)

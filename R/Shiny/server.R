@@ -2,6 +2,7 @@ source(file = "plotData.R")
 source(file = "mySample.R")
 source(file = "dataSimulation.R")
 source(file = "createSigma.R")
+source(file = "sampleCont.R")
 library("haven")
 
 shinyServer(function(input, output,session) {
@@ -20,28 +21,28 @@ shinyServer(function(input, output,session) {
 ## DV
   output$expecDV2x3 <- renderUI({
     conditionalPanel("input.design == '2x3'",
-                     helpText(input$g1DV),
+                     helpText(input$g1),
                      fluidRow(
                        column(4,
-                              numericInput("DV2x3.11", input$t1DV, 0)
+                              numericInput("DV2x3.11", input$t1, 0)
                        ),
                        column(4,
-                              numericInput("DV2x3.12", input$t2DV, 0)
+                              numericInput("DV2x3.12", input$t2, 0)
                        ),
                        column(4,
-                              numericInput("DV2x3.13", input$t3DV, 0)
+                              numericInput("DV2x3.13", input$t3, 0)
                        )
                      ),
-                     helpText(input$g2DV),
+                     helpText(input$g2),
                      fluidRow(
                        column(4,
-                              numericInput("DV2x3.21", input$t1DV, 0)
+                              numericInput("DV2x3.21", input$t1, 0)
                        ),
                        column(4,
-                              numericInput("DV2x3.22", input$t2DV, 0)
+                              numericInput("DV2x3.22", input$t2, 0)
                        ),
                        column(4,
-                              numericInput("DV2x3.23", input$t3DV, 0)
+                              numericInput("DV2x3.23", input$t3, 0)
                        )
                      )
 
@@ -50,31 +51,31 @@ shinyServer(function(input, output,session) {
 
   output$expecDV3x2 <- renderUI({
     conditionalPanel("input.design == '3x2'",
-                     helpText(input$g1DV),
+                     helpText(input$g1),
                      fluidRow(
                        column(6,
-                              numericInput("DV3x2.11", input$t1DV, 0)
+                              numericInput("DV3x2.11", input$t1, 0)
                        ),
                        column(6,
-                              numericInput("DV3x2.12", input$t2DV, 0)
+                              numericInput("DV3x2.12", input$t2, 0)
                        )
                      ),
-                     helpText(input$g2DV),
+                     helpText(input$g2),
                      fluidRow(
                        column(6,
-                              numericInput("DV3x2.21", input$t1DV, 0)
+                              numericInput("DV3x2.21", input$t1, 0)
                        ),
                        column(6,
-                              numericInput("DV3x2.22", input$t2DV, 0)
+                              numericInput("DV3x2.22", input$t2, 0)
                        )
                      ),
-                     helpText(input$g3DV),
+                     helpText(input$g3),
                      fluidRow(
                        column(6,
-                              numericInput("DV3x2.31", input$t1DV, 0)
+                              numericInput("DV3x2.31", input$t1, 0)
                        ),
                        column(6,
-                              numericInput("DV3x2.32", input$t2DV, 0)
+                              numericInput("DV3x2.32", input$t2, 0)
                        )
                      )
     )
@@ -98,28 +99,28 @@ shinyServer(function(input, output,session) {
 ## MV
   output$expecMV2x3 <- renderUI({
     conditionalPanel("input.design == '2x3'",
-                     helpText(input$g1MV),
+                     helpText(input$g1),
                      fluidRow(
                        column(4,
-                              numericInput("MV2x3.11", input$t1MV, 0)
+                              numericInput("MV2x3.11", input$t1, 0)
                        ),
                        column(4,
-                              numericInput("MV2x3.12", input$t2MV, 0)
+                              numericInput("MV2x3.12", input$t2, 0)
                        ),
                        column(4,
-                              numericInput("MV2x3.13", input$t3MV, 0)
+                              numericInput("MV2x3.13", input$t3, 0)
                        )
                      ),
-                     helpText(input$g2MV),
+                     helpText(input$g2),
                      fluidRow(
                        column(4,
-                              numericInput("MV2x3.21", input$t1MV, 0)
+                              numericInput("MV2x3.21", input$t1, 0)
                        ),
                        column(4,
-                              numericInput("MV2x3.22", input$t2MV, 0)
+                              numericInput("MV2x3.22", input$t2, 0)
                        ),
                        column(4,
-                              numericInput("MV2x3.23", input$t3MV, 0)
+                              numericInput("MV2x3.23", input$t3, 0)
                        )
                      )
 
@@ -128,31 +129,31 @@ shinyServer(function(input, output,session) {
 
   output$expecMV3x2 <- renderUI({
     conditionalPanel("input.design == '3x2'",
-                     helpText(input$g1MV),
+                     helpText(input$g1),
                      fluidRow(
                        column(6,
-                              numericInput("MV3x2.11", input$t1MV, 0)
+                              numericInput("MV3x2.11", input$t1, 0)
                        ),
                        column(6,
-                              numericInput("MV3x2.12", input$t2MV, 0)
+                              numericInput("MV3x2.12", input$t2, 0)
                        )
                      ),
-                     helpText(input$g2MV),
+                     helpText(input$g2),
                      fluidRow(
                        column(6,
-                              numericInput("MV3x2.21", input$t1MV, 0)
+                              numericInput("MV3x2.21", input$t1, 0)
                        ),
                        column(6,
-                              numericInput("MV3x2.22", input$t2MV, 0)
+                              numericInput("MV3x2.22", input$t2, 0)
                        )
                      ),
-                     helpText(input$g3MV),
+                     helpText(input$g3),
                      fluidRow(
                        column(6,
-                              numericInput("MV3x2.31", input$t1MV, 0)
+                              numericInput("MV3x2.31", input$t1, 0)
                        ),
                        column(6,
-                              numericInput("MV3x2.32", input$t2MV, 0)
+                              numericInput("MV3x2.32", input$t2, 0)
                        )
                      )
     )
@@ -220,11 +221,11 @@ shinyServer(function(input, output,session) {
   })
 
   columnNamesDV <- reactive({
-    paste(input$nameDV, c(input$t1DV, input$t2DV, input$t3DV), sep = ".")
+    paste(input$nameDV, c(input$t1, input$t2, input$t3), sep = ".")
   })
 
   columnNamesMV <- reactive({
-    paste(input$nameMV, c(input$t1MV, input$t2MV, input$t3MV), sep = ".")
+    paste(input$nameMV, c(input$t1, input$t2, input$t3), sep = ".")
   })
 
 
@@ -247,15 +248,15 @@ shinyServer(function(input, output,session) {
   output$plotDV <- renderPlot({
     plotData(datDV(),
              input$nameDV,
-             c(input$g1DV, input$g2DV, input$g3DV),
-             c(input$t1DV, input$t2DV, input$t3DV))
+             c(input$g1, input$g2, input$g3),
+             c(input$t1, input$t2, input$t3))
   })
 
   output$plotMV <- renderPlot({
     plotData(datMV(),
              input$nameMV,
-             c(input$g1MV, input$g2MV, input$g3MV),
-             c(input$t1MV, input$t2MV, input$t3MV))
+             c(input$g1, input$g2, input$g3),
+             c(input$t1, input$t2, input$t3))
   })
 
   observeEvent(input$next1, {
@@ -303,15 +304,16 @@ shinyServer(function(input, output,session) {
     df$Gender <- ordered(df$Gender, levels = 1:2, labels = c("F", "M"))
 
     attr(df$Group, "labels") <- unique(df$Group)
-    names(attr(df$Group, "labels")) <- c(input$g1DV, input$g2DV)
+    names(attr(df$Group, "labels")) <- c(input$g1, input$g2)
 
-    #df$Group <- ordered(df$Group, levels = 1:2, labels = c(input$g1DV, input$g2DV))
+    #df$Group <- ordered(df$Group, levels = 1:2, labels = c(input$g1, input$g2))
     if(!is.null(input$extra) && input$extra == "cat"){
       df$Cat <- sample(1:input$lvl, nrow(df), replace = T, prob = pCat())
       df$Cat <- ordered(df$Cat, levels = 1:input$lvl, labels = nameCat())
     }
-    if(!is.null(input$extra) && input$extra == "cont"){
-      df$Cont <- rnorm(nrow(df), (input$corCont*rowMeans(rawDataDV()))-rowMeans(rawDataDV()), sqrt(1-input$corCont^2))
+
+    if(!is.null(input$extra) && (input$extra == "cont" || identical(input$extra, c("cat", "cont")))){
+      df$Cont <- sampleCont(nrow(df), rowMeans(rawDataDV()), input$corCont, input$meanCont, input$minCont, input$maxCont)
     }
 
     set.seed(input$ID)

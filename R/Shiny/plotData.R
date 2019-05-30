@@ -13,7 +13,7 @@ plotData <- function(data, ylab, glab, tixlab){
                   y = Y,
                   group = Group,
                   colour = Group)) +
-    stat_summary(fun.data=mean_sdl, fun.args = list(mult=1),
+    stat_summary(fun.data = mean_sdl, fun.args = list(mult = 1),
                  geom = "pointrange", size = .75, position = position_dodge(width = .1)) +
     stat_summary(fun.y = mean, geom = "line", size = .75, position = position_dodge(width = .1)) +
     theme_minimal() +
