@@ -178,7 +178,11 @@ shinyServer(function(input, output,session) {
 
   ## max continuous variable
   output$maxCont <- renderUI({
-    numericInput("maxCont", "Maximum", NA, min = (input$minCont + 1))
+    numericInput("maxCont", "Maximum", NA, min = (input$meanCont + 1))
+  })
+
+  output$minCont <- renderUI({
+    numericInput("minCont", "Minimum", NA, max = (input$meanCont - 1))
   })
 
   ## categorical variable
@@ -197,7 +201,11 @@ shinyServer(function(input, output,session) {
 
   ## max age
   output$maxAge <- renderUI({
-    numericInput("maxAge", "Maximum age", NA, min = (input$minAge + 1))
+    numericInput("maxAge", "Maximum age", NA, min = (input$age + 1))
+  })
+
+  output$minAge <- renderUI({
+    numericInput("minAge", "Minimumn age", NA, 0, max = (input$age - 1))
   })
 
   simMatDV <- reactive({
@@ -213,7 +221,7 @@ shinyServer(function(input, output,session) {
       mu <- c(muDV, muMV)
       mySample(N = input$N,
                mu = mu,
-               Sigma = createSigma(input$design)
+               Sigma = createSigma(input$design, as.numeric(input$dirCor))
       )
   })
 
@@ -299,6 +307,7 @@ shinyServer(function(input, output,session) {
 
 
   dat <- reactive({
+    req(input$gender)
     set.seed(input$ID)
     df <- cbind(rawDataDV(), datMV())
     df$gender <- sample(1:2, nrow(df), replace = T, prob = c(input$gender/input$N, (1-input$gender/input$N)))
@@ -317,6 +326,7 @@ shinyServer(function(input, output,session) {
 
     if(!is.null(input$extra) && (input$extra == "cont" || identical(input$extra, c("cat", "cont")))){
       df$cont <- sampleCont(nrow(df), rowMeans(rawDataDV()), input$corCont, input$meanCont, input$minCont, input$maxCont)
+      names(df)[names(df) == "cont"] <- input$nameCont
     }
 
     set.seed(input$ID)
@@ -328,8 +338,16 @@ shinyServer(function(input, output,session) {
     dat()
   })
 
-  output$test <- renderTable({
-    pCat()
+  output$plotTitleDV <- renderText({
+    paste(input$nameDV, "per Group over Time")
+  })
+
+  output$plotTitleMV <- renderText({
+    paste(input$nameMV, "per Group over Time")
+  })
+
+  output$dir <- renderText({
+    paste("Relationship with", input$nameDV)
   })
 
   output$downloadData <- downloadHandler(

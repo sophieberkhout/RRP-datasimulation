@@ -27,10 +27,10 @@ navbarPage("", id = "navbar",
             sidebarPanel(
                  sliderInput("N", "Sample Size per Group", 30, 70, 50),
                  hr(),
-                 numericInput("age", "Mean age", 21, 0, width = "50%"),
+                 numericInput("age", "Mean age", NA, 0, width = "50%"),
                  fluidRow(
                    column(6,
-                          numericInput("minAge", "Minimumn age", NA, 0)
+                          uiOutput("minAge")
                    ),
                    column(6,
                           uiOutput("maxAge")
@@ -55,7 +55,7 @@ navbarPage("", id = "navbar",
                sidebarLayout(
         sidebarPanel(
                  h4("Dependent Variable"),
-                 textInput("nameDV", "Variable name"),
+                 textInput("nameDV", "Variable name", "DV"),
                  helpText("Measurement moment"),
                  fluidRow(
                    column(4,
@@ -102,7 +102,7 @@ navbarPage("", id = "navbar",
                  fluidRow(column(12, offset = 8, actionButton("next3", "Next")))
         ),
         mainPanel(
-          h4("Dependent Variable per Group over Time"),
+          h4(textOutput("plotTitleDV")),
           plotOutput("plotDV", width = "600px", height = "400px")
         )
       )
@@ -111,7 +111,12 @@ navbarPage("", id = "navbar",
                  sidebarLayout(
           sidebarPanel(
                  h4("Manipulation Check"),
-                 textInput("nameMV", "Variable name"),
+                 textInput("nameMV", "Variable name", "MC"),
+                 hr(),
+                 h4(textOutput("dir")),
+                 radioButtons("dirCor", "Direction",
+                              choiceNames = list("Positive", "Negative"),
+                              choiceValues = list(.5, -.5)),
                  hr(),
                  h4("Expectations"),
                  uiOutput("expecMV2x3"),
@@ -130,7 +135,7 @@ navbarPage("", id = "navbar",
                  fluidRow(column(12, offset = 8, actionButton("next4", "Next")))
         ),
         mainPanel(
-          h4("Manipulation Variable per Group over Time"),
+          h4(textOutput("plotTitleMV")),
           plotOutput("plotMV", width = "600px", height = "400px")
         )
       )
@@ -151,12 +156,12 @@ navbarPage("", id = "navbar",
                  conditionalPanel("input.extra.indexOf('cont') > -1",
                                   hr(),
                                   h4("Continuous Variable"),
-                                  textInput("nameCont", "Variable name", "Continuous"),
+                                  textInput("nameCont", "Variable name", "cont"),
                                   hr(),
                                   numericInput("meanCont", "Mean", 0, width = "50%"),
                                   fluidRow(
                                     column(6,
-                                           numericInput("minCont", "Minimum", NA)
+                                           uiOutput("minCont")
                                     ),
                                     column(6,
                                            uiOutput("maxCont")
@@ -171,8 +176,8 @@ navbarPage("", id = "navbar",
                  fluidRow(column(12, offset = 8, actionButton("next5", "Next")))
           ),
           mainPanel(
-            tableOutput("test")
-          )
+
+            )
       )
     ),
     tabPanel("Download Data",
