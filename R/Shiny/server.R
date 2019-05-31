@@ -89,64 +89,64 @@ shinyServer(function(input, output,session) {
     numericInput("maxDV", "Maximum", NA, min = (max(meansDV()) + 1))
   })
 
-## MV
-  output$expecMV2x3 <- renderUI({
+## MC
+  output$expecMC2x3 <- renderUI({
     conditionalPanel("input.design == '2x3'",
                      helpText(input$g1),
                      fluidRow(
                        column(4,
-                              numericInput("MV2x3.11", input$t1, 0)
+                              numericInput("MC2x3.11", input$t1, 0)
                        ),
                        column(4,
-                              numericInput("MV2x3.12", input$t2, 0)
+                              numericInput("MC2x3.12", input$t2, 0)
                        ),
                        column(4,
-                              numericInput("MV2x3.13", input$t3, 0)
+                              numericInput("MC2x3.13", input$t3, 0)
                        )
                      ),
                      helpText(input$g2),
                      fluidRow(
                        column(4,
-                              numericInput("MV2x3.21", input$t1, 0)
+                              numericInput("MC2x3.21", input$t1, 0)
                        ),
                        column(4,
-                              numericInput("MV2x3.22", input$t2, 0)
+                              numericInput("MC2x3.22", input$t2, 0)
                        ),
                        column(4,
-                              numericInput("MV2x3.23", input$t3, 0)
+                              numericInput("MC2x3.23", input$t3, 0)
                        )
                      )
 
     )
   })
 
-  output$expecMV3x2 <- renderUI({
+  output$expecMC3x2 <- renderUI({
     conditionalPanel("input.design == '3x2'",
                      helpText(input$g1),
                      fluidRow(
                        column(6,
-                              numericInput("MV3x2.11", input$t1, 0)
+                              numericInput("MC3x2.11", input$t1, 0)
                        ),
                        column(6,
-                              numericInput("MV3x2.12", input$t2, 0)
+                              numericInput("MC3x2.12", input$t2, 0)
                        )
                      ),
                      helpText(input$g2),
                      fluidRow(
                        column(6,
-                              numericInput("MV3x2.21", input$t1, 0)
+                              numericInput("MC3x2.21", input$t1, 0)
                        ),
                        column(6,
-                              numericInput("MV3x2.22", input$t2, 0)
+                              numericInput("MC3x2.22", input$t2, 0)
                        )
                      ),
                      helpText(input$g3),
                      fluidRow(
                        column(6,
-                              numericInput("MV3x2.31", input$t1, 0)
+                              numericInput("MC3x2.31", input$t1, 0)
                        ),
                        column(6,
-                              numericInput("MV3x2.32", input$t2, 0)
+                              numericInput("MC3x2.32", input$t2, 0)
                        )
                      )
     )
@@ -161,19 +161,19 @@ shinyServer(function(input, output,session) {
     }
   })
 
-  meansMV <- reactive({
+  meansMC <- reactive({
     if(input$design == "2x3"){
-      c(input$MV2x3.11, input$MV2x3.12, input$MV2x3.13, input$MV2x3.21, input$MV2x3.22, input$MV2x3.23)
+      c(input$MC2x3.11, input$MC2x3.12, input$MC2x3.13, input$MC2x3.21, input$MC2x3.22, input$MC2x3.23)
     } else {
-      c(input$MV3x2.11, input$MV3x2.12, input$MV3x2.21, input$MV3x2.22, input$MV3x2.31, input$MV3x2.32)
+      c(input$MC3x2.11, input$MC3x2.12, input$MC3x2.21, input$MC3x2.22, input$MC3x2.31, input$MC3x2.32)
     }
   })
 
-  output$minMV <- renderUI({
-    numericInput("minMV", "Minimum", NA, max = (min(meansMV()) - 1))
+  output$minMC <- renderUI({
+    numericInput("minMC", "Minimum", NA, max = (min(meansMC()) - 1))
   })
-  output$maxMV <- renderUI({
-    numericInput("maxMV", "Maximum", NA, min = (max(meansMV()) + 1))
+  output$maxMC <- renderUI({
+    numericInput("maxMC", "Maximum", NA, min = (max(meansMC()) + 1))
   })
 
   ## max continuous variable
@@ -211,14 +211,14 @@ shinyServer(function(input, output,session) {
   simMatDV <- reactive({
       set.seed(input$ID)
       muDV <- meansDV()
-      muMV <- meansMV()
+      muMC <- meansMC()
       if(is.null(muDV)){
         muDV <- rep(0, 6)
       }
-      if(is.null(muMV)){
-        muMV <- rep(0, 6)
+      if(is.null(muMC)){
+        muMC <- rep(0, 6)
       }
-      mu <- c(muDV, muMV)
+      mu <- c(muDV, muMC)
       mySample(N = input$N,
                mu = mu,
                Sigma = createSigma(input$design, as.numeric(input$dirCor))
@@ -229,8 +229,8 @@ shinyServer(function(input, output,session) {
     paste(input$nameDV, c(input$t1, input$t2, input$t3), sep = ".")
   })
 
-  columnNamesMV <- reactive({
-    paste(input$nameMV, c(input$t1, input$t2, input$t3), sep = ".")
+  columnNamesMC <- reactive({
+    paste(input$nameMC, c(input$t1, input$t2, input$t3), sep = ".")
   })
 
 
@@ -244,17 +244,18 @@ shinyServer(function(input, output,session) {
             names = columnNamesDV())
   })
 
-  datMV <- reactive({
+  datMC <- reactive({
     set.seed(input$ID)
     dataRRP(dat = simMatDV()[, 7:12],
             N = input$N,
-            min = input$minMV,
-            max = input$maxMV,
+            min = input$minMC,
+            max = input$maxMC,
             design = input$design,
-            names = columnNamesMV())
+            names = columnNamesMC())
   })
 
   output$plotDV <- renderPlot({
+    req(length(input$minDV) > 0)
     validate(
       if(!is.na(input$minDV)){
         need(all(input$minDV < meansDV()), "Your minimum has to be smaller than the means!")
@@ -269,18 +270,19 @@ shinyServer(function(input, output,session) {
              c(input$t1, input$t2, input$t3))
   })
 
-  output$plotMV <- renderPlot({
+
+  output$plotMC <- renderPlot({
+    req(length(input$minMC) > 0)
     validate(
-      if(!is.na(input$minMV)){
-        need(all(input$minMV < meansMV()), "Your minimum has to be smaller than the means!")
+      if(!is.na(input$minMC)){
+        need(all(input$minMC < meansMC()), "Your minimum has to be smaller than the means!")
       },
-      if(!is.na(input$maxMV)){
-        need(all(input$maxMV > meansMV()), "Your maximum has to be larger than the means!")
+      if(!is.na(input$maxMC)){
+        need(all(input$maxMC > meansMC()), "Your maximum has to be larger than the means!")
       }
     )
-
-    plotData(datMV(),
-             input$nameMV,
+    plotData(datMC(),
+             input$nameMC,
              c(input$g1, input$g2, input$g3),
              c(input$t1, input$t2, input$t3))
   })
@@ -326,7 +328,7 @@ shinyServer(function(input, output,session) {
   dat <- reactive({
     req(input$gender)
     set.seed(input$ID)
-    df <- cbind(rawDataDV(), datMV())
+    df <- cbind(rawDataDV(), datMC())
     df$gender <- sample(1:2, nrow(df), replace = T, prob = c(input$gender/input$N, (1-input$gender/input$N)))
     df$age <- round(rnorm(nrow(df), input$age))
     df$age[df$age < input$minAge | df$age > input$maxAge] <- mean(df$age)
@@ -352,6 +354,9 @@ shinyServer(function(input, output,session) {
   })
 
   output$table <- renderTable({
+    validate(
+      need(input$gender, "Fill in the descriptives tab!")
+    )
     dat()
   })
 
@@ -359,8 +364,8 @@ shinyServer(function(input, output,session) {
     paste(input$nameDV, "per Group over Time")
   })
 
-  output$plotTitleMV <- renderText({
-    paste(input$nameMV, "per Group over Time")
+  output$plotTitleMC <- renderText({
+    paste(input$nameMC, "per Group over Time")
   })
 
   output$dir <- renderText({
@@ -368,6 +373,7 @@ shinyServer(function(input, output,session) {
   })
 
   output$descText <- renderText({
+    req(length(input$minAge) > 0)
     validate(
       need(input$age, "Provide the mean age!"),
       if(!is.na(input$minAge)){
@@ -381,9 +387,7 @@ shinyServer(function(input, output,session) {
 
   output$extraTextCont <- renderText({
     req(input$extra == "cont")
-    if(a = b){
-
-    }
+    req(length(input$minCont) > 0)
     validate(
       need(input$meanCont, paste0("Provide the mean for ", input$nameCont, "!")),
       if(!is.na(input$minCont)){
@@ -395,10 +399,17 @@ shinyServer(function(input, output,session) {
     )
   })
 
+
   output$extraTextCat <- renderText({
     req(input$extra == "cat")
     validate(
       need(!any(is.na(pCat())), "Provide a probability for each category!")
+    )
+  })
+
+  output$idText <- renderText({
+    validate(
+      need(input$ID != 1, "Fill in your student number!")
     )
   })
 

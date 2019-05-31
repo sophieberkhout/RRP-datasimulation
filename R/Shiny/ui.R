@@ -1,5 +1,11 @@
 library(shiny)
 library(shinythemes)
+library(shinycssloaders)
+
+options(spinner.color = "grey",
+        spinner.size = .3,
+        spinner.type = 5)
+
 
 navbarPage("", id = "navbar",
            windowTitle = "Data Simulation - Research and Report Practical",
@@ -13,12 +19,12 @@ navbarPage("", id = "navbar",
               p("With this app you can simulate your own data for the writing course."),
               hr(),
               p(HTML("<strong>IMPORTANT:</strong> Do not forget to fill in your student number!")),
-              numericInput("ID", "Student Number", 0),
+              numericInput("ID", "Student Number", 1),
               hr(),
               fluidRow(column(12, offset = 8, actionButton("next1", "Next")))
             ),
             mainPanel(
-
+              textOutput("idText")
             )
           )
         ),
@@ -55,7 +61,7 @@ navbarPage("", id = "navbar",
                sidebarLayout(
         sidebarPanel(
                  h4("Dependent Variable"),
-                 textInput("nameDV", "Variable name", "DV"),
+                 textInput("nameDV", "Variable name", "dv"),
                  helpText("Measurement moment"),
                  fluidRow(
                    column(4,
@@ -103,7 +109,9 @@ navbarPage("", id = "navbar",
         ),
         mainPanel(
           h4(textOutput("plotTitleDV")),
-          plotOutput("plotDV", width = "600px", height = "400px")
+          textOutput("valMinDV"),
+          textOutput("valMAxDV"),
+          withSpinner(plotOutput("plotDV"))
         )
       )
       ),
@@ -111,7 +119,7 @@ navbarPage("", id = "navbar",
                  sidebarLayout(
           sidebarPanel(
                  h4("Manipulation Check"),
-                 textInput("nameMV", "Variable name", "MC"),
+                 textInput("nameMC", "Variable name", "mc"),
                  hr(),
                  h4(textOutput("dir")),
                  radioButtons("dirCor", "Direction",
@@ -119,24 +127,24 @@ navbarPage("", id = "navbar",
                               choiceValues = list(.5, -.5)),
                  hr(),
                  h4("Expectations"),
-                 uiOutput("expecMV2x3"),
-                 uiOutput("expecMV3x2"),
+                 uiOutput("expecMC2x3"),
+                 uiOutput("expecMC3x2"),
                  h4("Restrictions"),
                  hr(),
                  fluidRow(
                    column(6,
-                          uiOutput("minMV")
+                          uiOutput("minMC")
                    ),
                    column(6,
-                          uiOutput("maxMV")
+                          uiOutput("maxMC")
                    )
                  ),
                  hr(),
                  fluidRow(column(12, offset = 8, actionButton("next4", "Next")))
         ),
         mainPanel(
-          h4(textOutput("plotTitleMV")),
-          plotOutput("plotMV", width = "600px", height = "400px")
+          h4(textOutput("plotTitleMC")),
+          withSpinner(plotOutput("plotMC"))
         )
       )
       ),
