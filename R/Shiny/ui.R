@@ -21,7 +21,7 @@ options(spinner.color = "grey",
                   p("With this app you can simulate your own data for the writing course."),
                   hr(),
                   p(HTML("<strong>IMPORTANT:</strong> Do not forget to fill in your student number!")),
-                  numericInput("ID", "Student Number", 1),
+                  numericInput("ID", "Student Number", 1, 0),
                   hr(),
                   fluidRow(column(12, offset = 8, actionButton("next1", "Next")))
                 ),
