@@ -275,19 +275,23 @@ shinyServer(function(input, output,session) {
     req(input$gender)
     set.seed(input$ID)
     df <- cbind(rawDataDV(), datMC())
+  # Sample gender
     df$gender <- sample(1:2, nrow(df), replace = T,
                         prob = c(input$gender/input$N, (1-input$gender/input$N)))
     df$gender <- ordered(df$gender, levels = 1:2, labels = c("F", "M"))
+  # Sample age and replace violations of min and max with mean
     df$age <- round(rnorm(nrow(df), input$age))
     df$age[df$age < input$minAge | df$age > input$maxAge] <- mean(df$age)
     df$group <- ordered(df$group, levels = 1:2, labels = c(input$g1, input$g2))
     # attr(df$group, "labels") <- unique(df$group)
     # names(attr(df$group, "labels")) <- c(input$g1, input$g2)
+  # Add categorical variable if supplied
     if(!is.null(input$extra) && input$extra == "cat"){
+    # Sample categorical variable
       df$cat <- sample(1:input$lvl, nrow(df), replace = T, prob = pCat())
       df$cat <- ordered(df$cat, levels = 1:input$lvl, labels = nameCat())
     }
-
+  # Add continuous variable if supplied (uses function sampleContRRP)
     if(!is.null(input$extra) && (input$extra == "cont" ||
                                  identical(input$extra, c("cat", "cont")))){
       df$cont <- sampleContRRP(x = rowMeans(rawDataDV()),

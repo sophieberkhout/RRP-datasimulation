@@ -18,20 +18,15 @@
 #' sampleContRRP(x = x, cor = .7, mean = 3, min = 1, max = 6)
 
 sampleContRRP <- function(x, cor, mean, min, max){
-  theta <- acos(cor)             # corresponding angle
-  N <- length(x)
-  x2    <- rnorm(N, mean)      # new random data
-  X     <- cbind(x, x2)         # matrix
-  Xctr  <- scale(X, center=TRUE, scale=FALSE)   # centered columns (mean 0)
-
-  Id   <- diag(N)                               # identity matrix
-  Q    <- qr.Q(qr(Xctr[, 1, drop = FALSE]))      # QR-decomposition, just matrix Q
-  P    <- tcrossprod(Q)          # = Q Q'       # projection onto space defined by x1
-  x2o  <- (Id-P) %*% Xctr[, 2]                 # x2ctr made orthogonal to x1ctr
-  Xc2  <- cbind(Xctr[ , 1], x2o)                # bind to matrix
-  Y    <- Xc2 %*% diag(1 / sqrt(colSums(Xc2 ^ 2)))  # scale columns to length 1
-
-  y <- Y[, 2] + (1 / tan(theta)) * Y[, 1]     # final new vector
+  n <- length(x)
+  m <- cbind(x, rnorm(n, mean))
+  mc <- scale(m, center=TRUE, scale=FALSE)    # center columns
+  q <- qr.Q(qr(mc[, 1, drop = FALSE]))        # QR-decomposition, just matrix Q
+  p <- tcrossprod(q)                          # projection onto space defined by x1
+  mo <- (diag(n)-p) %*% mc[, 2]       # x2ctr made orthogonal to x1ctr
+  X <- cbind(mc[, 1], mo)
+  Y <- X %*% diag(1 / sqrt(colSums(X ^ 2)))   # scale columns to length 1
+  y <- Y[, 2] + (1 / tan(acos(cor))) * Y[, 1] # new vector with mean zero
   cv <- y * 10 + mean
   cv[cv < min | cv > max] <- mean(cv)
   return(cv)
