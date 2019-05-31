@@ -8,7 +8,7 @@ To see the Shiny App, go to: https://sophieberkhout.shinyapps.io/RRP-datasimulat
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+If you want to run the code yourself (not necessary to see the Shiny App, see link above).
 
 ```
 library(shiny)
