@@ -12,7 +12,7 @@ shinyServer(function(input, output,session) {
   })
 
   output$females <- renderUI({
-    numericInput("gender", "Number of females", round(input$N/2, 0), 0, input$N, width = "50%")
+    sliderInput("gender", "Number of females", 0, input$N, input$N/2, step = 1)
   })
   output$males <- renderUI({
     helpText(HTML("<strong>Number of males</strong></br>&emsp;"), input$N - input$gender)
