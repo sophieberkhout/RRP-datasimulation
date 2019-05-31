@@ -18,6 +18,7 @@
 
 library(tidyr)
 library(ggplot2)
+library(Hmisc)
 
 plotDataRRP <- function(data, ylab, glab, tixlab){
   dataPlot <- data %>% gather(Time, Y, -group) # reshape into long format

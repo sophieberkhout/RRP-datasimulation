@@ -5,9 +5,8 @@ account: sophieberkhout
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 959047
-bundleId: 2120912
+bundleId: 2121465
 url: https://sophieberkhout.shinyapps.io/RRP-datasimulation/
-when: 1559304320.93653
+when: 1559318695.39139
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: catSim.R|expectations2x3.R
