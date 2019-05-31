@@ -1,8 +1,8 @@
-source(file = "plotData.R")
-source(file = "mySample.R")
-source(file = "dataSimulation.R")
-source(file = "createSigma.R")
-source(file = "sampleCont.R")
+source(file = "plotDataRRP.R")
+source(file = "rrpSample.R")
+source(file = "rrpAsDf.R")
+source(file = "rrpSigma.R")
+source(file = "sampleContRRP.R")
 library("haven")
 
 shinyServer(function(input, output,session) {
@@ -219,9 +219,9 @@ shinyServer(function(input, output,session) {
         muMC <- rep(0, 6)
       }
       mu <- c(muDV, muMC)
-      mySample(N = input$N,
+      rrpSample(N = input$N,
                mu = mu,
-               Sigma = createSigma(input$design, as.numeric(input$dirCor))
+               Sigma = rrpSigma(input$design, .7, as.numeric(input$dirCor))
       )
   })
 
@@ -236,7 +236,7 @@ shinyServer(function(input, output,session) {
 
   datDV <- reactive({
     set.seed(input$ID)
-    dataRRP(dat = simMatDV()[, 1:6],
+    rrpAsDf(dat = simMatDV()[, 1:6],
             N = input$N,
             min = input$minDV,
             max = input$maxDV,
@@ -246,7 +246,7 @@ shinyServer(function(input, output,session) {
 
   datMC <- reactive({
     set.seed(input$ID)
-    dataRRP(dat = simMatDV()[, 7:12],
+    rrpAsDf(dat = simMatDV()[, 7:12],
             N = input$N,
             min = input$minMC,
             max = input$maxMC,
@@ -264,7 +264,7 @@ shinyServer(function(input, output,session) {
         need(all(input$maxDV > meansDV()), "Your maximum has to be larger than the means!")
       }
     )
-    plotData(datDV(),
+    plotDataRRP(datDV(),
              input$nameDV,
              c(input$g1, input$g2, input$g3),
              c(input$t1, input$t2, input$t3))
@@ -281,7 +281,7 @@ shinyServer(function(input, output,session) {
         need(all(input$maxMC > meansMC()), "Your maximum has to be larger than the means!")
       }
     )
-    plotData(datMC(),
+    plotDataRRP(datMC(),
              input$nameMC,
              c(input$g1, input$g2, input$g3),
              c(input$t1, input$t2, input$t3))
@@ -344,7 +344,7 @@ shinyServer(function(input, output,session) {
     }
 
     if(!is.null(input$extra) && (input$extra == "cont" || identical(input$extra, c("cat", "cont")))){
-      df$cont <- sampleCont(nrow(df), rowMeans(rawDataDV()), input$corCont, input$meanCont, input$minCont, input$maxCont)
+      df$cont <- sampleContRRP(rowMeans(rawDataDV()), input$corCont, input$meanCont, input$minCont, input$maxCont)
       names(df)[names(df) == "cont"] <- input$nameCont
     }
 
