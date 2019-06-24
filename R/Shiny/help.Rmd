@@ -1,0 +1,173 @@
+---
+title: "Help"
+geometry: margin=4cm
+indent: true
+header-includes:
+  - \usepackage{setspace}\onehalfspacing
+output: 
+  html_document:
+    toc: true
+---
+
+# User Manual
+## General
+It is recommended to open the app on a desktop and not on a mobile device. 
+
+The app consists of different tabs. To go to the next tab, you can click on the
+'Next' button on the bottom right of the sidebar. If you want to go back or 
+navigate through other tabs, you can click on the tabs at the top of the page.
+This manual will explain per tab what is required for you to fill in and how to
+do it.
+
+## Home
+In the Home tab there is only one thing to fill in: your student number. It is
+very important that you enter your student number, as we will be able to 
+recreate your data if you run in any issues.
+
+## Descriptives
+This tab is to provide the descriptives of the data. It is necessary to fill in
+this tab first, since the next tabs are dependent on the design that is filled
+in here.
+
+#### Sample size per group
+This slider indicates how many observations (i.e., participants) will be in 
+each group. For example, if you put in 50, and you have two groups, than you
+will have a total sample size of 100.
+
+#### Age
+In this part you will fill in the characteristics of the age variable. It is 
+required to fill in the mean age. However, the minimum and maximum age are not.
+You can leave these two blank if not applicable.
+For example, if your experiment only includes adults and you expect your sample
+to consist mostly of students, than your expected mean age would be 21 and the
+minimum age would be 18.
+
+#### Gender
+For gender you can change how many females you expect to be in your sample. On
+default, the slider will indicate half of your sample size. If you want only
+females, than you can slide the slider to the right. Or, if you have only males,
+than you can slide the slider to zero (the left). As you can see, the corresponding
+number of males is also shown.
+
+#### Design
+This is an important section to fill in. According to your assignment, you
+had chosen between two designs: two independent conditions/groups and three repeated
+measures or three independent conditions/groups and two repeated measures. Since
+the design influences what your data will look like, it is important to fill this in
+before continuing further.
+
+## Dependent Variable
+This tab is about the dependent or outcome variable of your design. For example, 
+if you test the effect of mindfulness on depression, than depression is your
+dependent variable. According to the assignment, you have already picked a 
+measurement scale for this variable.
+
+#### Variable name {#name}
+This is the name of the dependent variable. Generally, you would use an abbreviation
+of the measurement scale. For example, if you measure depression with the 
+*Beck Depression Inventory* you would fill in 'BDI' here. 
+It is recommended to use a recognisable name, as this will be used as the column
+names in the dataset.
+
+#### Measurement moment
+For the measurement moment you fill in how to define these moments. Depending on
+the design, you will fill in either two or three names here. The default values
+are 'one','two', and, (if applicable) 'three'. It is not necessary to change this,
+but you can if you want it to be more recognisable for you. For example, if you
+have an experimental design with an intervention and you measure before and after,
+you can name these 'before' and 'after', or 'pre' and 'post'.
+
+#### Group names
+The group names are the names of the experimental conditions. These are the 
+different groups that are in your design. So, for example, a control and a
+treatment condition. 
+
+#### Expectations {#expec}
+Your expectations are probably the most important to fill in. This will determine
+what your data will look like. Note that the figure on the right shows how the
+data is currently. Changing the expectation values will also change the figure. 
+
+What you should fill in here are the expected mean values of the different
+measurement moments, per group. Take for example, the BDI. This is a scale ranging
+from 0 to 63 where values between 20-28 indicate a moderate depression. 
+The higher the score, the more depressed a person is.  
+
+If you want to test whether depression goes down given a certain intervention,
+you will maybe want to test people that are moderately depressed. So, at the
+first measurement, you expect them to have an average score of let's say 25.
+Imagine you have a control group and an intervention group. You expect the score
+of the first measurement to be the same for both groups (randomised controlled trial).
+However, while you expect the control condition to remain relatively the same,
+as they do not get an intervention, you expect the intervention condition to
+go down.  
+
+Thus, the expected means for the control group will be around or equal to 25, and
+the expected means for the intervention group go from 25 to lower values.
+
+#### Restrictions {#restr}
+The restrictions indicate the minimum and maximum values of the measurement
+scale. If your scale does not have these values, it is not required to fill this
+in. If we move forward on the previous example, you see that the minimum of the BDI
+scale is 0 and the maximum is 63. 
+
+## Manipulation Check
+The manipulation check is to test whether your intervention actually worked. When
+you test the effect of mindfulness on depression, you probably have an intervention
+increasing mindfulness. Now, the manipulation check should measure if the
+mindfulness actually increased for the participants receiving the intervention.
+
+#### Variable name
+See [previous section](#name).
+
+####Relationship with 'dependent variable'
+This part is about how the dependent and the manipulation variable are related
+to each other. If you want to test if mindfulness influences depression,
+these variables are expected to correlate. Thus, for example, if you expect
+depression to go down as mindfulness goes up, the correlation should be negative.
+
+#### Expectations
+See [previous section](#expec).
+
+#### Restrictions
+See [previous section](#restr).
+
+## Extra
+According to the assignment you may add one or two extra variables to your design. 
+You can choose a categorical and/or a continuous variable. 
+However, it is not required to do so.
+
+#### Categorical
+Click on the categorical checkbox if you want to add a categorical variable. 
+If you later decide to remove this variable, you can uncheck the box.  
+
+The categorical variable is a nominal variable consisting of multiple categories. 
+For this variable you have to provide how many categories there are. For example, 
+if you want to look at difference in hair colour, you could add three categories:
+blond, brown, or other. These are to be filled in for the names of the categories.
+Moreover, each category has its own probability. If you expect most to be either
+brown haired or blond haired, you could set the probabilities for both of these .4, 
+and for the other category to .2. Note that these are probabilities, so logically,
+they should add up to one.
+
+#### Continuous
+Click on the categorical checkbox if you want to add a categorical variable. 
+As with the categorical variable, you can uncheck the box if you later decide 
+to remove this variable.  
+
+The continuous variable looks a lot like the age variable. Also for this variable,
+you provide a mean, a minimum, and a maximum value. What is different here, is that
+you can enter a relationship between this variable and the dependent variable.  
+For example, if you think hours of sleep per day is related to depression and
+your are interested in this relationship, you can add the variable sleep. 
+Let's say that people with depression tend to sleep a lot. For the mean we could 
+say eight hours of sleep, and the minimum is zero with a maximum
+of 24 (although very unlikely). Thus, more sleep indicates more depression,
+so we expect a positive relationship. If we expect it to be a strong relationship,
+we can set it to .7, for example.
+
+## Download Data
+This tab is rather straightforward. In the main panel on the right you can see
+a table of the data to be downloaded. On the side panel you can decide if you want
+to download a .CSV file or an SPSS data file (.SAV). If you are going to analyse
+your data in SPSS, it is recommended to download the .SAV file. If you would
+like to use a different tool, like R, you can download the .CSV file.

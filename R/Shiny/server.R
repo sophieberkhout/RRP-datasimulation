@@ -4,6 +4,7 @@ source(file = "rrpAsDf.R")
 source(file = "rrpSigma.R")
 source(file = "sampleContRRP.R")
 library(haven)
+library(MASS)
 
 shinyServer(function(input, output,session) {
 ### LOGO ###
@@ -242,9 +243,9 @@ shinyServer(function(input, output,session) {
         muMC <- rep(0, 6)
       }
       mu <- c(muDV, muMC)
-      rrpSample(N = input$N,
-               mu = mu,
-               Sigma = rrpSigma(input$design, .7, as.numeric(input$dirCor))
+      mvrnorm(n = input$N,
+              mu = mu,
+              Sigma = rrpSigma(input$design, .7, as.numeric(input$dirCor))
       )
   })
 # Reshape data in data frame with grouping variable
@@ -282,7 +283,11 @@ shinyServer(function(input, output,session) {
   # Sample age and replace violations of min and max with mean
     df$age <- round(rnorm(nrow(df), input$age))
     df$age[df$age < input$minAge | df$age > input$maxAge] <- mean(df$age)
-    df$group <- ordered(df$group, levels = 1:2, labels = c(input$g1, input$g2))
+    if(input$design == "2x3"){
+      df$group <- ordered(df$group, levels = 1:2, labels = c(input$g1, input$g2))
+    } else {
+      df$group <- ordered(df$group, levels = 1:3, labels = c(input$g1, input$g2, input$g3))
+    }
     # attr(df$group, "labels") <- unique(df$group)
     # names(attr(df$group, "labels")) <- c(input$g1, input$g2)
   # Add categorical variable if supplied

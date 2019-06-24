@@ -37,6 +37,10 @@ options(spinner.color = "grey",
                   h4("Sample Size"),
                   sliderInput("N", "Sample size per group", 30, 70, 50),
                   hr(),
+                  h4("Gender"),
+                  uiOutput("females"),
+                  uiOutput("males"),
+                  hr(),
                   h4("Age"),
                   numericInput("age", "Mean age", NA, 0, width = "50%"),
                   fluidRow(
@@ -47,10 +51,6 @@ options(spinner.color = "grey",
                            uiOutput("maxAge")
                     )
                   ),
-                  hr(),
-                  h4("Gender"),
-                  uiOutput("females"),
-                  uiOutput("males"),
                   hr(),
                   h4("Design"),
                   helpText("What kind of measurements do you use?"),
@@ -99,7 +99,7 @@ options(spinner.color = "grey",
                    ),
                    column(4,
                           conditionalPanel("input.design == '3x2'",
-                                           textInput("g3", "Group 3", "Placebo")
+                                           textInput("g3", "Group 3", "placebo")
                           )
                    )
                   ),
@@ -223,7 +223,9 @@ options(spinner.color = "grey",
                   tableOutput("table")
                 )
               )
-            )
+            ),
+            tabPanel("Help",
+              includeMarkdown("help.Rmd"))
  )
 
 
