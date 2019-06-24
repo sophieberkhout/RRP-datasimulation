@@ -8,7 +8,7 @@ To see the Shiny App, go to: https://sophieberkhout.shinyapps.io/RRP-datasimulat
 
 ### Prerequisites
 
-If you want to run the code yourself (not necessary to see the Shiny App, see link above).
+If you want to run the code yourself.
 
 ```
 library(shiny)
@@ -18,6 +18,7 @@ library(haven)
 library(tidyr)
 library(ggplot2)
 library(Hmisc)
+library(MASS)
 ```
 ## Authors
 
